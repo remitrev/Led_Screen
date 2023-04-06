@@ -208,12 +208,78 @@ namespace Led_Screen
             GattCharacteristic characteristic = characteristicResult.Characteristics.First();
 
             //TODO: Ecrire byte[]
-            var content = GetEnteteToSendContents();
-            Debug.Print(content.ToString());
+            //var content = GetEnteteToSendContents();
+            //Debug.Print(content.ToString());
+            var content1 = new byte[16];
+            content1[0] = 119;
+            content1[1] = 97;
+            content1[2] = 110;
+            content1[3] = 103;
+            content1[4] = 0;
+            content1[5] = 0;
+            //TODO: getFlash bar[6]
+            content1[6] = 0;
+            //TODO: getMarquee bar[7]
+            content1[7] = 0;
+            //TODO: getModeAndSpeed [8 - 15]
+            for (int i2 = 0; i2 < 8; i2++)
+            {
+                if (i2 % 2 == 0)
+                {
+                    content1[i2 + 8] = 48;
+                }
+                else
+                {
+                    content1[i2 + 8] = 0;
+                }
+            }
 
-            IBuffer buffer = Windows.Security.Cryptography.CryptographicBuffer.CreateFromByteArray(content);
+            var content2 = new byte[16];
+            content2[0] = 0;
+            content2[1] = 1;
+            for (int i2 = 0; i2 < 14; i2++)
+            {
+                content2[i2 + 2] = 0;
+            }
+
+            var content3 = new byte[16];
+            for (int i = 0; i < 16; i++)
+            {
+                content3[i] = 0;
+            }
+            var content4 = new byte[16];
+            for (int i = 0; i < 16; i++)
+            {
+                content4[i] = 0;
+            }
+            var content5 = new byte[16];
+            content5[0] = 0;
+            content5[1] = 198;
+            content5[2] = 198;
+            content5[3] = 198;
+            content5[4] = 198;
+            content5[5] = 214;
+            content5[6] = 254;
+            content5[7] = 238;
+            content5[8] = 198;
+            content5[9] = 130;
+            content5[10] = 0;
+            content5[11] = 0;
+            content5[12] = 0;
+            content5[13] = 0;
+            content5[14] = 0;
+            content5[15] = 0;
+
+            IBuffer buffer = Windows.Security.Cryptography.CryptographicBuffer.CreateFromByteArray(content1);
             await characteristic.WriteValueAsync(buffer);
-
+            buffer = Windows.Security.Cryptography.CryptographicBuffer.CreateFromByteArray(content2);
+            await characteristic.WriteValueAsync(buffer);
+            buffer = Windows.Security.Cryptography.CryptographicBuffer.CreateFromByteArray(content3);
+            await characteristic.WriteValueAsync(buffer);
+            buffer = Windows.Security.Cryptography.CryptographicBuffer.CreateFromByteArray(content4);
+            await characteristic.WriteValueAsync(buffer);
+            buffer = Windows.Security.Cryptography.CryptographicBuffer.CreateFromByteArray(content5);
+            await characteristic.WriteValueAsync(buffer);
             Debug.Print("Envoye");
         }
     }
