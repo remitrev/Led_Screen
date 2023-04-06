@@ -34,27 +34,8 @@ namespace Led_Screen
         {
             InitializeComponent();
             InitWatcher();
-            //listBox.ItemsSource = BluetoothLEDevices.Select(device => device.Name);
             bluetoothDevicesListBox.ItemsSource = BluetoothLEDevices.Select(device => device.Name);            
         }
-
-        /*private async void Button_Click(object sender, RoutedEventArgs e)
-        {
-            BluetoothLEDevices.Clear();
-
-            // Recherche les périphériques Bluetooth LE disponibles.
-            var devices = await DeviceInformation.FindAllAsync(BluetoothLEDevice.GetDeviceSelector());
-
-            // Ajoute les périphériques à la liste.
-            foreach (var device in devices)
-            {
-                var bluetoothLEDevice = await BluetoothLEDevice.FromIdAsync(device.Id);
-                BluetoothLEDevices.Add(bluetoothLEDevice);
-            }
-
-            // Met à jour les noms des périphériques dans la liste.
-            listBox.ItemsSource = BluetoothLEDevices.Select(device => device.Name);
-        }*/
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -73,7 +54,7 @@ namespace Led_Screen
             this.watcher.Received += Watcher_Received;
         }
 
-        private async void Button_Click_1(object sender, RoutedEventArgs e)
+        private async Task Start_SearchAsync()
         {
             this.watcher.Start();
             await Task.Delay(3000);
@@ -81,26 +62,24 @@ namespace Led_Screen
             bluetoothDevicesListBox.ItemsSource = BluetoothLEDevices.Select(device => device.Name);
         }
 
-        private void stop_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
         private async void Watcher_Received(
             BluetoothLEAdvertisementWatcher sender,
             BluetoothLEAdvertisementReceivedEventArgs args)
         {
             var device = await BluetoothLEDevice.FromBluetoothAddressAsync(args.BluetoothAddress);            
-            if (device != null && !CheckBluetoothDevices(device.Name))
+            if (device != null && !CheckBluetoothDevicesByName(device.Name))
             {
                 Debug.Print("Name :" + device.Name);
                 await Dispatcher.InvokeAsync(() => BluetoothLEDevices.Add(device));
             }
         }
 
-        private bool CheckBluetoothDevices(string name)
+
+        #endregion
+
+        private bool CheckBluetoothDevicesByName(string name)
         {
-            foreach(var device in BluetoothLEDevices)
+            foreach (var device in BluetoothLEDevices)
             {
                 if (device.Name.Equals(name))
                 {
@@ -109,21 +88,15 @@ namespace Led_Screen
             }
             return false;
         }
-        #endregion
 
-        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void Button_Click_1(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
+            await Start_SearchAsync();
         }
 
         private void ListBox_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
         {
 
-        }       
+        }
     }
 }
