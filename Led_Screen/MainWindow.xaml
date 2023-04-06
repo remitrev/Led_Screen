@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Led_Screen"
         mc:Ignorable="d"
-        Title="MainWindow" Height="200" Width="500">
+        Title="MainWindow" Height="400" Width="500">
     <Grid>
         <Button x:Name="start" Content="Search Bluetooth Devices" HorizontalAlignment="Left" VerticalAlignment="Top" Width="157" Margin="25,50,0,0" Click="Button_Click_1" Height="46"/>
-        <ListBox x:Name="bluetoothDevicesListBox" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="248" Margin="203,23,0,0" SelectionChanged="ListBox_SelectionChanged_1"/>
+        <ListBox x:Name="bluetoothDevicesListBox" HorizontalAlignment="Left" Height="310" VerticalAlignment="Top" Width="248" Margin="203,23,0,0" SelectionChanged="ListBox_SelectionChanged_1"/>
 
     </Grid>
 </Window>
