@@ -9,6 +9,7 @@
     <Grid>
         <Button x:Name="start" Content="Search Bluetooth Devices" HorizontalAlignment="Left" VerticalAlignment="Top" Width="157" Margin="25,50,0,0" Click="Button_Click_1" Height="46"/>
         <ListBox x:Name="bluetoothDevicesListBox" HorizontalAlignment="Left" Height="310" VerticalAlignment="Top" Width="248" Margin="203,23,0,0" SelectionChanged="ListBox_SelectionChanged_1"/>
+        <Button x:Name="sendMessage" Content="Send Message" HorizontalAlignment="Left" VerticalAlignment="Top" Width="126" Margin="25,157,0,0" Height="37" Click="Button_Click_2"/>
 
     </Grid>
 </Window>
