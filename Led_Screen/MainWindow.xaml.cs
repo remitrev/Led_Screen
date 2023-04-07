@@ -30,6 +30,8 @@ namespace Led_Screen
     {
         private BluetoothLEAdvertisementWatcher watcher;
 
+        private Dictionary<string, byte[]> characterMapper;
+
         public ObservableCollection<BluetoothLEDevice> BluetoothLEDevices { get; } = new ObservableCollection<BluetoothLEDevice>();
 
         public BluetoothLEDevice bluetoothDeviceSelected = null;
@@ -69,9 +71,10 @@ namespace Led_Screen
         private async Task Start_SearchAsync()
         {
             this.watcher.Start();
-            await Task.Delay(3000);
+            await Task.Delay(5000);
             this.watcher.Stop();
             bluetoothDevicesListBox.ItemsSource = BluetoothLEDevices.Select(device => device.Name);
+            Debug.Print("Fin de recherche");
         }
 
         private async void Watcher_Received(
@@ -253,16 +256,32 @@ namespace Led_Screen
                 content4[i] = 0;
             }
             var content5 = new byte[16];
+            /* content5[0] = 0;
+             content5[1] = 198;
+             content5[2] = 198;
+             content5[3] = 198;
+             content5[4] = 198;
+             content5[5] = 214;
+             content5[6] = 254;
+             content5[7] = 238;
+             content5[8] = 198;
+             content5[9] = 130;
+             content5[10] = 0;
+             content5[11] = 0;
+             content5[12] = 0;
+             content5[13] = 0;
+             content5[14] = 0;
+             content5[15] = 0;*/
             content5[0] = 0;
-            content5[1] = 198;
-            content5[2] = 198;
-            content5[3] = 198;
-            content5[4] = 198;
-            content5[5] = 214;
-            content5[6] = 254;
-            content5[7] = 238;
-            content5[8] = 198;
-            content5[9] = 130;
+            content5[1] = 60;
+            content5[2] = 66;
+            content5[3] = 129;
+            content5[4] = 129;
+            content5[5] = 255;
+            content5[6] = 129;
+            content5[7] = 129;
+            content5[8] = 129;
+            content5[9] = 129;
             content5[10] = 0;
             content5[11] = 0;
             content5[12] = 0;
@@ -270,17 +289,75 @@ namespace Led_Screen
             content5[14] = 0;
             content5[15] = 0;
 
-            IBuffer buffer = Windows.Security.Cryptography.CryptographicBuffer.CreateFromByteArray(content1);
-            await characteristic.WriteValueAsync(buffer);
-            buffer = Windows.Security.Cryptography.CryptographicBuffer.CreateFromByteArray(content2);
-            await characteristic.WriteValueAsync(buffer);
-            buffer = Windows.Security.Cryptography.CryptographicBuffer.CreateFromByteArray(content3);
-            await characteristic.WriteValueAsync(buffer);
-            buffer = Windows.Security.Cryptography.CryptographicBuffer.CreateFromByteArray(content4);
-            await characteristic.WriteValueAsync(buffer);
-            buffer = Windows.Security.Cryptography.CryptographicBuffer.CreateFromByteArray(content5);
-            await characteristic.WriteValueAsync(buffer);
+            List<byte[]> contents = new List<byte[]>();
+            contents.Add(content1);
+            contents.Add(content2);
+            contents.Add(content3);
+            contents.Add(content4);
+            contents.Add(content5);
+            foreach(var content in contents)
+            {
+                IBuffer buffer = Windows.Security.Cryptography.CryptographicBuffer.CreateFromByteArray(content);
+                await characteristic.WriteValueAsync(buffer);
+            }
             Debug.Print("Envoye");
+        }
+
+        private void InitMappeur()
+        {
+            this.characterMapper = new Dictionary<string, byte[]>();
+            this.characterMapper.Add("A_byte", new byte[] { 0, 126, 129, 129, 129, 126, 129, 129, 129, 126, 0 });
+            this.characterMapper.Add("B_byte", new byte[] { 0, 255, 137, 137, 137, 126, 137, 137, 137, 255, 0 });
+            this.characterMapper.Add("C_byte", new byte[] { 0, 62, 65, 129, 129, 128, 129, 129, 65, 62, 0 });
+            this.characterMapper.Add("D_byte", new byte[] { 0, 254, 145, 137, 137, 137, 137, 137, 145, 254, 0 });
+            this.characterMapper.Add("E_byte", new byte[] { 0, 255, 129, 129, 129, 126, 129, 129, 129, 255, 0 });
+            this.characterMapper.Add("F_byte", new byte[] { 0, 255, 129, 129, 129, 126, 129, 129, 129, 129, 0 });
+            this.characterMapper.Add("G_byte", new byte[] { 0, 62, 65, 129, 129, 128, 133, 133, 65, 62, 0 });
+            this.characterMapper.Add("H_byte", new byte[] { 0, 129, 129, 129, 129, 126, 129, 129, 129, 129, 0 });
+            this.characterMapper.Add("I_byte", new byte[] { 0, 62, 8, 8, 8, 8, 8, 8, 8, 62, 0 });
+            this.characterMapper.Add("J_byte", new byte[] { 0, 2, 1, 1, 1, 1, 129, 129, 65, 62, 0 });
+            this.characterMapper.Add("K_byte", new byte[] { 0, 129, 133, 137, 145, 162, 145, 137, 133, 129, 0 });
+            this.characterMapper.Add("L_byte", new byte[] { 0, 129, 129, 129, 129, 129, 129, 129, 129, 255, 0 });
+            this.characterMapper.Add("M_byte", new byte[] { 0, 129, 195, 165, 165, 153, 129, 129, 129, 129, 0 });
+            this.characterMapper.Add("N_byte", new byte[] { 0, 129, 193, 161, 145, 137, 133, 131, 129, 129, 0 });
+            this.characterMapper.Add("O_byte", new byte[] { 0, 62, 65, 129, 129, 129, 129, 129, 65, 62, 0 });
+            this.characterMapper.Add("P_byte", new byte[] { 0, 254, 145, 145, 145, 254, 128, 128, 128, 128, 0 });
+            this.characterMapper.Add("Q_byte", new byte[] { 0, 62, 65, 129, 129, 129, 145, 145, 73, 190, 128 });
+            this.characterMapper.Add("R_byte", new byte[] { 0, 254, 145, 145, 145, 254, 136, 137, 133, 129, 0 });
+            this.characterMapper.Add("S_byte", new byte[] { 0, 62, 65, 128, 128, 62, 1, 1, 129, 62, 0 });
+            this.characterMapper.Add("T_byte", new byte[] { 0, 255, 8, 8, 8, 8, 8, 8, 8, 8, 0 });
+            this.characterMapper.Add("U_byte", new byte[] { 0, 129, 129, 129, 129, 129, 129, 129, 65, 62, 0 });
+            this.characterMapper.Add("V_byte", new byte[] { 0, 129, 129, 129, 129, 66, 66, 36, 24, 24, 0 });
+            this.characterMapper.Add("W_byte", new byte[] { 0, 129, 129, 129, 153, 165, 165, 165, 66, 66, 0 });
+            this.characterMapper.Add("X_byte", new byte[] { 0, 129, 66, 36, 24, 24, 36, 66, 129, 129, 0 });
+            this.characterMapper.Add("Y_byte", new byte[] { 0, 129, 66, 36, 24, 24, 24, 24, 24, 60, 0 });
+            this.characterMapper.Add("Z_byte", new byte[] { 0, 255, 2, 4, 8, 16, 32, 64, 128, 255, 0 });
+            this.characterMapper.Add("a_byte", new byte[] { 0, 0, 30, 33, 65, 65, 65, 65, 63, 0, 0 });
+            this.characterMapper.Add("b_byte", new byte[] { 0, 192, 192, 224, 208, 200, 200, 200, 248, 0, 0 });
+            this.characterMapper.Add("c_byte", new byte[] { 0, 0, 60, 66, 128, 128, 128, 66, 60, 0, 0 });
+            this.characterMapper.Add("d_byte", new byte[] { 0, 28, 12, 12, 12, 12, 140, 204, 120, 0, 0 });
+            this.characterMapper.Add("e_byte", new byte[] { 0, 0, 60, 66, 126, 128, 128, 66, 60, 0, 0 });
+            this.characterMapper.Add("f_byte", new byte[] { 0, 14, 17, 16, 60, 16, 16, 16, 40, 0, 0 });
+            this.characterMapper.Add("g_byte", new byte[] { 0, 0, 60, 66, 66, 66, 62, 2, 60, 66, 60 });
+            this.characterMapper.Add("h_byte", new byte[] { 0, 192, 192, 224, 208, 200, 200, 200, 200, 0, 0 });
+            this.characterMapper.Add("i_byte", new byte[] { 0, 24, 0, 56, 24, 24, 24, 24, 60, 0, 0 });
+            this.characterMapper.Add("j_byte", new byte[] { 0, 6, 0, 14, 6, 6, 6, 70, 58, 0, 0 });
+            this.characterMapper.Add("k_byte", new byte[] { 0, 192, 192, 200, 208, 240, 208, 200, 196, 0, 0 });
+            this.characterMapper.Add("l_byte", new byte[] { 0, 56, 24, 24, 24, 24, 24, 24, 60, 0, 0 });
+            this.characterMapper.Add("m_byte", new byte[] { 0, 0, 198, 255, 146, 146, 146, 146, 146, 0, 0 });
+            this.characterMapper.Add("n_byte", new byte[] { 0, 0, 216, 236, 212, 212, 204, 204, 204, 0, 0 });
+            this.characterMapper.Add("o_byte", new byte[] { 0, 0, 56, 68, 130, 130, 130, 68, 56, 0, 0 });
+            this.characterMapper.Add("p_byte", new byte[] { 0, 240, 104, 100, 100, 120, 96, 96, 240, 0, 0 });
+            this.characterMapper.Add("q_byte", new byte[] { 0, 0, 60, 66, 66, 66, 62, 2, 6, 0, 0 });
+            this.characterMapper.Add("r_byte", new byte[] { 0, 0, 216, 236, 212, 212, 192, 192, 192, 0, 0 });
+            this.characterMapper.Add("s_byte", new byte[] { 0, 0, 126, 128, 124, 2, 2, 130, 124, 0, 0 });
+            this.characterMapper.Add("t_byte", new byte[] { 0, 16, 16, 60, 16, 16, 16, 17, 14, 0, 0 });
+            this.characterMapper.Add("u_byte", new byte[] { 0, 0, 68, 68, 68, 68, 60, 0, 0, 0, 0 });
+            this.characterMapper.Add("v_byte", new byte[] { 0, 0, 68, 68, 68, 40, 16, 0, 0, 0, 0 });
+            this.characterMapper.Add("w_byte", new byte[] { 0, 0, 146, 146, 146, 146, 146, 84, 40, 0, 0 });
+            this.characterMapper.Add("x_byte", new byte[] { 0, 0, 132, 72, 48, 48, 72, 132, 0, 0, 0 });
+            this.characterMapper.Add("y_byte", new byte[] { 0, 0, 68, 68, 68, 60, 4, 4, 24, 0, 0 });
+            this.characterMapper.Add("z_byte", new byte[] { 0, 0, 126, 64, 32, 16, 8, 4, 126, 0, 0 });
         }
     }
 }
