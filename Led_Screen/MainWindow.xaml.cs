@@ -72,7 +72,7 @@ namespace Led_Screen
         private async Task Start_SearchAsync()
         {
             this.watcher.Start();
-            await Task.Delay(10000);
+            await Task.Delay(2000);
             this.watcher.Stop();
             bluetoothDevicesListBox.ItemsSource = BluetoothLEDevices.Select(device => device.Name);
             Debug.Print("Fin de recherche");
@@ -105,9 +105,9 @@ namespace Led_Screen
             return false;
         }
 
-        private byte[] GetEnteteToSendContents(/*List content*/)
+        private byte[] GetFirstEnteteToSendContents()
         {
-            var bArr = new byte[80];
+            var bArr = new byte[16];
             bArr[0] = 119;
             bArr[1] = 97;
             bArr[2] = 110;
@@ -121,56 +121,60 @@ namespace Led_Screen
             //TODO: getModeAndSpeed [8 - 15]
             for (int i2 = 0; i2 < 8; i2++)
             {
-                if (i2% 2 == 0)
+                if (i2 % 2 == 0)
                 {
                     bArr[i2 + 8] = 48;
                 }
                 else
                 {
                     bArr[i2 + 8] = 0;
-                }                
+                }
             }
-            //TODO: getMsgLength [16-31]
-            bArr[16] = 0;
-            bArr[17] = 1;
-            for (int i2 = 0; i2 < 26; i2++)
+            return bArr;
+        }
+        private byte[] GetSecondEnteteToSendContents(string mess)
+        {
+            var bArr = new byte[16];
+            //TODO: getMsgLength
+            /*if(mess.Length >= 256)
             {
-                bArr[i2 + 18] = 0;
-            }
-            bArr[32] = 0;
-            bArr[33] = 0;
-            bArr[34] = 0;
-            bArr[35] = 0;
-            bArr[36] = 0;
-            bArr[37] = 0;
-            //TODO: getDate [38-43] peut etre mettre à 0, à tester
-            for (int i2 = 0; i2 < 6; i2++)
+                // Transform the message length into 2 bytes
+                bArr[0] = (byte)(mess.Length >> 8);  // MSB
+                bArr[1] = (byte)mess.Length;         // LSB
+            } else
             {
-                bArr[i2 + 38] = 0;
-            }
-            for (int i2 = 0; i2 < 19; i2++)
+                bArr[0] = 0;
+                bArr[1] = (byte)mess.Length;
+            }*/
+            
+            // Transform the message length into 2 bytes
+            bArr[0] = (byte)(mess.Length >> 8);  // MSB
+            bArr[1] = (byte)mess.Length;         // LSB
+            for (int i2 = 0; i2 < 14; i2++)
             {
-                bArr[i2 + 44] = 0;
+                bArr[i2 + 2] = 0;
             }
-            bArr[63] = 0;
-
-            //Ecris la lettre W
-            bArr[64] = 0;
-            bArr[65] = 198;
-            bArr[66] = 198;
-            bArr[67] = 198;
-            bArr[68] = 198;
-            bArr[69] = 214;
-            bArr[70] = 254;
-            bArr[71] = 238;
-            bArr[72] = 198;
-            bArr[73] = 130;
-            bArr[74] = 0;
-            bArr[75] = 0;
-            bArr[76] = 0;
-            bArr[77] = 0;
-            bArr[78] = 0;
-            bArr[79] = 0;
+            return bArr;
+        }
+        
+        private byte[] GetThirdEnteteToSendContents()
+        {
+            var bArr = new byte[16];
+            //TODO: 0 partout meme 4eùe entete
+            for(int i=0; i <16; i++)
+            {
+                bArr[i] = 0;
+            }
+            return bArr;
+        }
+        private byte[] GetForthEnteteToSendContents()
+        {
+            var bArr = new byte[16];
+            //TODO: 0 partout meme 4eùe entete
+            for (int i = 0; i < 16; i++)
+            {
+                bArr[i] = 0;
+            }
             return bArr;
         }
 
@@ -194,6 +198,8 @@ namespace Led_Screen
 
         private async void Button_Click_2(object sender, RoutedEventArgs e)
         {
+            Debug.Print("Debut de l'envoie");
+            
             //TODO: test bluetoothDeviceSelected and name = LSLED NotNull
             var test = await bluetoothDeviceSelected.GetGattServicesAsync();
 
@@ -210,64 +216,11 @@ namespace Led_Screen
             //GattDeviceService service = test.Services.FirstOrDefault(s => s.Uuid.Equals(UUID_SERVICE));
             var characteristicResult = await service.GetCharacteristicsForUuidAsync(characteristicsUUID);
             GattCharacteristic characteristic = characteristicResult.Characteristics.First();
-
-            //TODO: Ecrire byte[]
-            //var content = GetEnteteToSendContents();
-            //Debug.Print(content.ToString());
-            var content1 = new byte[16];
-            content1[0] = 119;
-            content1[1] = 97;
-            content1[2] = 110;
-            content1[3] = 103;
-            content1[4] = 0;
-            content1[5] = 0;
-            //TODO: getFlash bar[6]
-            content1[6] = 0;
-            //TODO: getMarquee bar[7]
-            content1[7] = 0;
-            //TODO: getModeAndSpeed [8 - 15]
-            for (int i2 = 0; i2 < 8; i2++)
-            {
-                if (i2 % 2 == 0)
-                {
-                    content1[i2 + 8] = 48;
-                }
-                else
-                {
-                    content1[i2 + 8] = 0;
-                }
-            }
-
-            var content2 = new byte[16];
-            content2[0] = 0;
-            /*content2[1] = 1;*/
-            if(message.Text.Length> 256)
-            {
-                throw new Exception("Message trop long");
-            } else{
-                content2[1] = (byte)message.Text.Length;
-            }
-            for (int i2 = 0; i2 < 14; i2++)
-            {
-                content2[i2 + 2] = 0;
-            }
-
-            var content3 = new byte[16];
-            for (int i = 0; i < 16; i++)
-            {
-                content3[i] = 0;
-            }
-            var content4 = new byte[16];
-            for (int i = 0; i < 16; i++)
-            {
-                content4[i] = 0;
-            }
-
             List<byte[]> contents = new List<byte[]>();
-            contents.Add(content1);
-            contents.Add(content2);
-            contents.Add(content3);
-            contents.Add(content4);
+            contents.Add(GetFirstEnteteToSendContents());
+            contents.Add(GetSecondEnteteToSendContents(message.Text));
+            contents.Add(GetThirdEnteteToSendContents());
+            contents.Add(GetForthEnteteToSendContents());
 
             var messageInListByte = transformMessage(message.Text);
             foreach(var paquet in messageInListByte)
@@ -297,7 +250,17 @@ namespace Led_Screen
                 this.characterMapper.TryGetValue(c + "_byte",out content);
                 temp.Add(content);
             }
-            var nbPaquets = (int)(mess.Length * 11 / 16)+1;
+            double division = mess.Length * 11.0 / 16.0;
+            int nbPaquets = 0;
+            if (division % 1 == 0)
+            {
+                nbPaquets = (int)division;
+            }
+            else
+            {
+                nbPaquets = (int)Math.Ceiling(division);
+            }
+            //var nbPaquets = (int)(mess.Length * 11 / 16) + 1;
             int compt = 0;
             int currentKey = 0;
             for(int i=0; i< nbPaquets; i++) {
