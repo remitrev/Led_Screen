@@ -124,42 +124,41 @@ namespace Led_Screen
             }
             return bArr;
         }
-        private byte[] GetSecondEnteteToSendContents(string mess)
+        private byte[] GetSecondEnteteToSendContents(string[] messages)
         {
-            var tabMess = mess.Split('|');
             var bArr = new byte[16];
 
             // Transform the message length into 2 bytes
-            bArr[0] = (byte)(tabMess[0].Length >> 8);  // MSB
-            bArr[1] = (byte)tabMess[0].Length;         // LSB
-            if(tabMess[1] != "")
+            bArr[0] = (byte)(messages[0].Length >> 8);  // MSB
+            bArr[1] = (byte)messages[0].Length;         // LSB
+            if(messages[1] != "")
             {
-                bArr[2] = (byte)(tabMess[1].Length >> 8);  // MSB
-                bArr[3] = (byte)tabMess[1].Length;         // LSB
-                if (tabMess[2] != "")
+                bArr[2] = (byte)(messages[1].Length >> 8);  // MSB
+                bArr[3] = (byte)messages[1].Length;         // LSB
+                if (messages[2] != "")
                 {
-                    bArr[4] = (byte)(tabMess[2].Length >> 8);  // MSB
-                    bArr[5] = (byte)tabMess[2].Length;         // LSB
-                    if (tabMess[3] != "")
+                    bArr[4] = (byte)(messages[2].Length >> 8);  // MSB
+                    bArr[5] = (byte)messages[2].Length;         // LSB
+                    if (messages[3] != "")
                     {
-                        bArr[6] = (byte)(tabMess[3].Length >> 8);  // MSB
-                        bArr[7] = (byte)tabMess[3].Length;         // LSB
-                        if (tabMess[4] != "")
+                        bArr[6] = (byte)(messages[3].Length >> 8);  // MSB
+                        bArr[7] = (byte)messages[3].Length;         // LSB
+                        if (messages[4] != "")
                         {
-                            bArr[8] = (byte)(tabMess[4].Length >> 8);  // MSB
-                            bArr[9] = (byte)tabMess[4].Length;         // LSB
-                            if (tabMess[5] != "")
+                            bArr[8] = (byte)(messages[4].Length >> 8);  // MSB
+                            bArr[9] = (byte)messages[4].Length;         // LSB
+                            if (messages[5] != "")
                             {
-                                bArr[10] = (byte)(tabMess[5].Length >> 8);  // MSB
-                                bArr[11] = (byte)tabMess[5].Length;         // LSB
-                                if (tabMess[6] != "")
+                                bArr[10] = (byte)(messages[5].Length >> 8);  // MSB
+                                bArr[11] = (byte)messages[5].Length;         // LSB
+                                if (messages[6] != "")
                                 {
-                                    bArr[12] = (byte)(tabMess[6].Length >> 8);  // MSB
-                                    bArr[13] = (byte)tabMess[6].Length;         // LSB
-                                    if (tabMess[7] != "")
+                                    bArr[12] = (byte)(messages[6].Length >> 8);  // MSB
+                                    bArr[13] = (byte)messages[6].Length;         // LSB
+                                    if (messages[7] != "")
                                     {
-                                        bArr[14] = (byte)(tabMess[7].Length >> 8);  // MSB
-                                        bArr[15] = (byte)tabMess[7].Length;         // LSB
+                                        bArr[14] = (byte)(messages[7].Length >> 8);  // MSB
+                                        bArr[15] = (byte)messages[7].Length;         // LSB
                                         
                                     }
                                     else
@@ -220,6 +219,7 @@ namespace Led_Screen
 
         private byte[] GetThirdEnteteToSendContents()
         {
+            //Can put date here
             var bArr = new byte[16];
             for (int i = 0; i < 16; i++)
             {
@@ -263,19 +263,19 @@ namespace Led_Screen
             List<byte[]> contents = new List<byte[]>();
             contents.Add(GetFirstEnteteToSendContents());
             //Concat messages
-            var messages = firstMessage.Text +"|"+ 
-                secondMessage.Text + "|" + 
-                thirdMessage.Text + "|" + 
-                forthMessage.Text + "|" + 
-                _5Message.Text + "|" + 
-                _6Message.Text + "|" + 
-                _7Message.Text + "|" + 
-                _8Message.Text;
+            var messages = [firstMessage.Text ,
+                secondMessage.Text,
+                thirdMessage.Text, 
+                forthMessage.Text, 
+                _5Message.Text, 
+                _6Message.Text, 
+                _7Message.Text, 
+                _8Message.Text];
             contents.Add(GetSecondEnteteToSendContents(messages));
             contents.Add(GetThirdEnteteToSendContents());
             contents.Add(GetForthEnteteToSendContents());
 
-            var messageInListByte = transformMessage(firstMessage.Text);
+            var messageInListByte = transformMessage(messages);
             foreach (var paquet in messageInListByte)
             {
                 contents.Add(paquet);
@@ -291,15 +291,22 @@ namespace Led_Screen
             return true;
         }
 
-        private List<byte[]> transformMessage(string mess)
+        private List<byte[]> transformMessage(string[] messages)
         {
-            var res = new List<byte[]>();
+            var res = new List<byte[]>();            
             var temp = new List<byte[]>();
-            //fais un tableau de tout les paquets
+            //Concatene tout les messages
+            var mess = messages[0] + messages[1] + messages[2] + messages[3] + messages[4] + messages[5] + messages[6] + messages[7];
+
+            //Pour chacun des caracteres du message
             foreach (var c in mess)
             {
                 byte[] content = new byte[11];
-                //TODO action si null
+                //Init à 0 si on ne trouve pas le caractère dans le code
+                for(int i = 0; i<11; i++)
+                {
+                    content[i] = 0;
+                }
 
                 this.characterMapper.TryGetValue(c + "_byte", out content);
                 temp.Add(content);
