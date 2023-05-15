@@ -124,7 +124,7 @@ namespace Led_Screen
             }
             return bArr;
         }
-        private byte[] GetSecondEnteteToSendContents(string[] messages)
+        private byte[] GetSecondEnteteToSendContents(List<String> messages)
         {
             var bArr = new byte[16];
 
@@ -263,14 +263,15 @@ namespace Led_Screen
             List<byte[]> contents = new List<byte[]>();
             contents.Add(GetFirstEnteteToSendContents());
             //Concat messages
-            var messages = [firstMessage.Text ,
-                secondMessage.Text,
-                thirdMessage.Text, 
-                forthMessage.Text, 
-                _5Message.Text, 
-                _6Message.Text, 
-                _7Message.Text, 
-                _8Message.Text];
+            List<string> messages = new List<string>();
+            messages.Add(firstMessage.Text);
+            messages.Add(secondMessage.Text);
+            messages.Add(thirdMessage.Text);
+            messages.Add(forthMessage.Text);
+            messages.Add(_5Message.Text);
+            messages.Add(_6Message.Text);
+            messages.Add(_7Message.Text);
+            messages.Add(_8Message.Text);
             contents.Add(GetSecondEnteteToSendContents(messages));
             contents.Add(GetThirdEnteteToSendContents());
             contents.Add(GetForthEnteteToSendContents());
@@ -291,7 +292,7 @@ namespace Led_Screen
             return true;
         }
 
-        private List<byte[]> transformMessage(string[] messages)
+        private List<byte[]> transformMessage(List<String> messages)
         {
             var res = new List<byte[]>();            
             var temp = new List<byte[]>();
