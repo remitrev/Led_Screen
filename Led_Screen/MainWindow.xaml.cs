@@ -283,7 +283,6 @@ namespace Led_Screen
 
             foreach (var content in contents)
             {
-                //TODO Catch error
                 IBuffer buffer = Windows.Security.Cryptography.CryptographicBuffer.CreateFromByteArray(content);
                 await characteristic.WriteValueAsync(buffer);
             }
@@ -381,7 +380,6 @@ namespace Led_Screen
             errorOnTryCatch.Visibility = Visibility.Hidden;
             errorMessage.Visibility = Visibility.Hidden;
 
-            //TODO: gestion erreur si false renvoye
             if (allLEDScreen.IsChecked == true)
             {
                 if(BluetoothLEDevices.Count() == 0)
