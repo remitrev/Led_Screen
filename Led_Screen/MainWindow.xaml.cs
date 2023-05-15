@@ -168,10 +168,12 @@ namespace Led_Screen
         private async void ListBox_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
         {
             // Recupere le nom du Device
-            string selectedDeviceName = bluetoothDevicesListBox.SelectedItem as string;
+            string selectedDeviceString = bluetoothDevicesListBox.SelectedItem as string;
+
+            var tabDevice = selectedDeviceString.Split(':');
 
             // Recherche l'appareil BluetoothLEDevice correspondant dans la collection BluetoothLEDevices
-            BluetoothLEDevice selectedDevice = BluetoothLEDevices.FirstOrDefault(device => device.Name == selectedDeviceName);
+            BluetoothLEDevice selectedDevice = BluetoothLEDevices.FirstOrDefault(device => device.BluetoothAddress == ulong.Parse(tabDevice[1]));
 
             // Affecte l'appareil sélectionné à la variable bluetoothDeviceSelected
             bluetoothDeviceSelected = selectedDevice;
@@ -189,7 +191,14 @@ namespace Led_Screen
             }
             else //Send to selected device
             {
-                await SendToOneDeviceAsync(bluetoothDeviceSelected);
+                if(bluetoothDeviceSelected != null)
+                {
+                    await SendToOneDeviceAsync(bluetoothDeviceSelected);
+                } else
+                {
+                    //TODO: Message erreur -> pas de device select
+                    Debug.Print("pas de devices");
+                }
             }
         }
 
@@ -198,7 +207,7 @@ namespace Led_Screen
             Debug.Print("Debut de l'envoie");
 
             //TODO: test bluetoothDeviceSelected and name = LSLED NotNull
-            var test = await bluetoothDeviceSelected.GetGattServicesAsync();
+            var test = await device.GetGattServicesAsync();
 
             GattDeviceService service = null;
             foreach (var unService in test.Services)
@@ -226,6 +235,7 @@ namespace Led_Screen
 
             foreach (var content in contents)
             {
+                //TODO Catch error
                 IBuffer buffer = Windows.Security.Cryptography.CryptographicBuffer.CreateFromByteArray(content);
                 await characteristic.WriteValueAsync(buffer);
             }
