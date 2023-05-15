@@ -230,7 +230,6 @@ namespace Led_Screen
         private byte[] GetForthEnteteToSendContents()
         {
             var bArr = new byte[16];
-            //TODO: 0 partout meme 4eùe entete
             for (int i = 0; i < 16; i++)
             {
                 bArr[i] = 0;
@@ -355,12 +354,14 @@ namespace Led_Screen
 
         private async void Button_Click_1(object sender, RoutedEventArgs e)
         {
+            errorMessage.Visibility = Visibility.Hidden;
             BluetoothLEDevices.Clear();
             await Start_SearchAsync();
         }
 
         private async void ListBox_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
         {
+            errorMessage.Visibility = Visibility.Hidden;
             // Recupere le nom du Device
             string selectedDeviceString = bluetoothDevicesListBox.SelectedItem as string;
 
@@ -375,22 +376,48 @@ namespace Led_Screen
 
         private async void Button_Click_2(object sender, RoutedEventArgs e)
         {
+            //Reset label error
+            errorOnTryCatch.Content = "";
+            errorOnTryCatch.Visibility = Visibility.Hidden;
+            errorMessage.Visibility = Visibility.Hidden;
+
             //TODO: gestion erreur si false renvoye
             if (allLEDScreen.IsChecked == true)
             {
+                if(BluetoothLEDevices.Count() == 0)
+                {
+                    errorMessage.Visibility = Visibility.Visible;
+                    return;
+                }
                 foreach (var device in BluetoothLEDevices)
                 {
-                    await SendToOneDeviceAsync(bluetoothDeviceSelected);
+                    try
+                    {
+                        await SendToOneDeviceAsync(bluetoothDeviceSelected);
+                    } catch (Exception exc)
+                    {
+                        errorOnTryCatch.Content = exc.Message;
+                        errorOnTryCatch.Visibility = Visibility.Visible;
+                    }
+                    
                 }
             }
             else //Send to selected device
             {
                 if(bluetoothDeviceSelected != null)
                 {
-                    await SendToOneDeviceAsync(bluetoothDeviceSelected);
+                    try
+                    {
+                        await SendToOneDeviceAsync(bluetoothDeviceSelected);
+                    }
+                    catch (Exception exc)
+                    {
+                        errorOnTryCatch.Content = exc.Message;
+                        errorOnTryCatch.Visibility = Visibility.Visible;
+                    }
                 } else
                 {
-                    //TODO: Message erreur -> pas de device select
+                    errorMessage.Visibility = Visibility.Visible;
                     Debug.Print("pas de devices");
                 }
             }
@@ -398,7 +425,7 @@ namespace Led_Screen
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
-
+            errorMessage.Visibility = Visibility.Hidden;
         }
 
 
@@ -503,7 +530,6 @@ namespace Led_Screen
         #region init Mapper
         private void InitMappeur()
         {
-            //TODO: Add number
             this.characterMapper = new Dictionary<string, byte[]>();
 
             //Majuscules

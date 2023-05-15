@@ -23,10 +23,14 @@
         <Label Content="5ème Message" HorizontalAlignment="Left" Margin="506,146,0,0" VerticalAlignment="Top" Width="103"/>
         <TextBox x:Name="_6Message" HorizontalAlignment="Left" Height="23" Margin="655,191,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox6_TextChanged" IsReadOnly="True"/>
         <Label Content="6ème Message" HorizontalAlignment="Left" Margin="663,146,0,0" VerticalAlignment="Top" Width="103"/>
-        <TextBox x:Name="_7Message" HorizontalAlignment="Left" Height="23" Margin="416,275,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox7_TextChanged" IsReadOnly="True"/>
-        <Label Content="7ème Message" HorizontalAlignment="Left" Margin="424,230,0,0" VerticalAlignment="Top" Width="103"/>
-        <TextBox x:Name="_8Message" HorizontalAlignment="Left" Height="23" Margin="596,275,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox8_TextChanged" IsReadOnly="True"/>
-        <Label Content="8ème Message" HorizontalAlignment="Left" Margin="604,230,0,0" VerticalAlignment="Top" Width="103"/>
+        <TextBox x:Name="_7Message" HorizontalAlignment="Left" Height="23" Margin="344,275,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox7_TextChanged" IsReadOnly="True"/>
+        <Label Content="7ème Message" HorizontalAlignment="Left" Margin="352,230,0,0" VerticalAlignment="Top" Width="103"/>
+        <TextBox x:Name="_8Message" HorizontalAlignment="Left" Height="23" Margin="490,275,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox8_TextChanged" IsReadOnly="True"/>
+        <Label Content="8ème Message" HorizontalAlignment="Left" Margin="498,230,0,0" VerticalAlignment="Top" Width="103"/>
+        <Label Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Label x:Name="errorMessage" Content="Pas d'écrans Led sélectionné&#xD;&#xA; ou disponibles" HorizontalAlignment="Left" Margin="312,310,0,0" VerticalAlignment="Top" Width="168" Height="45" Background="Red" Visibility="Hidden"/>
+        <Label Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Label x:Name="errorOnTryCatch" Content="Label" HorizontalAlignment="Left" Margin="663,238,0,0" VerticalAlignment="Top" Width="205" Height="109" Visibility="Hidden"/>
 
     </Grid>
 </Window>
