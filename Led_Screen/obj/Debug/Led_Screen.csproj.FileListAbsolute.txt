@@ -36,3 +36,4 @@ C:\Users\TREVISA1\Documents\GitHub\Led_Screen\Led_Screen\obj\Debug\Led_Screen.cs
 C:\Users\TREVISA1\Documents\GitHub\Led_Screen\Led_Screen\obj\Debug\Led_Screen.csproj.CopyComplete
 C:\Users\TREVISA1\Documents\GitHub\Led_Screen\Led_Screen\obj\Debug\Led_Screen.exe
 C:\Users\TREVISA1\Documents\GitHub\Led_Screen\Led_Screen\obj\Debug\Led_Screen.pdb
+D:\Led_Screen\Led_Screen\obj\Debug\Led_Screen.csproj.SuggestedBindingRedirects.cache

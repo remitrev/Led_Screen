@@ -11,6 +11,7 @@
         <ListBox x:Name="bluetoothDevicesListBox" HorizontalAlignment="Left" Height="310" VerticalAlignment="Top" Width="248" Margin="203,23,0,0" SelectionChanged="ListBox_SelectionChanged_1"/>
         <Button x:Name="sendMessage" Content="Send Message" HorizontalAlignment="Left" VerticalAlignment="Top" Width="126" Margin="25,157,0,0" Height="37" Click="Button_Click_2"/>
         <TextBox x:Name="message" HorizontalAlignment="Left" Height="23" Margin="31,268,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged"/>
+        <CheckBox x:Name="allLEDScreen" Content="Envoyer a tout les ecran LED dispo?" HorizontalAlignment="Left" Margin="224,349,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked"/>
 
     </Grid>
 </Window>

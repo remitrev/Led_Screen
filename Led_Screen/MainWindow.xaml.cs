@@ -135,21 +135,12 @@ namespace Led_Screen
         private byte[] GetSecondEnteteToSendContents(string mess)
         {
             var bArr = new byte[16];
-            //TODO: getMsgLength
-            /*if(mess.Length >= 256)
-            {
-                // Transform the message length into 2 bytes
-                bArr[0] = (byte)(mess.Length >> 8);  // MSB
-                bArr[1] = (byte)mess.Length;         // LSB
-            } else
-            {
-                bArr[0] = 0;
-                bArr[1] = (byte)mess.Length;
-            }*/
             
             // Transform the message length into 2 bytes
             bArr[0] = (byte)(mess.Length >> 8);  // MSB
             bArr[1] = (byte)mess.Length;         // LSB
+
+            //TODO: si plusieurs messages add length for each message
             for (int i2 = 0; i2 < 14; i2++)
             {
                 bArr[i2 + 2] = 0;
@@ -198,42 +189,50 @@ namespace Led_Screen
 
         private async void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            Debug.Print("Debut de l'envoie");
-            
-            //TODO: test bluetoothDeviceSelected and name = LSLED NotNull
-            var test = await bluetoothDeviceSelected.GetGattServicesAsync();
-
-            GattDeviceService service = null;
-            foreach (var unService in test.Services)
+            //TODO: si check box -> on envoie a tout les ecrans led
+            if (allLEDScreen.IsChecked == true)
             {
-                if (unService.Uuid.Equals(serviceUUID))
+                //TODO send to all devices
+            }
+            else //Send to selected device
+            { 
+                Debug.Print("Debut de l'envoie");
+
+                //TODO: test bluetoothDeviceSelected and name = LSLED NotNull
+                var test = await bluetoothDeviceSelected.GetGattServicesAsync();
+
+                GattDeviceService service = null;
+                foreach (var unService in test.Services)
                 {
-                    service = unService;
+                    if (unService.Uuid.Equals(serviceUUID))
+                    {
+                        service = unService;
+                    }
                 }
-            }
-            //TODO: Test Service notNull
+                //TODO: Test Service notNull
 
-            //GattDeviceService service = test.Services.FirstOrDefault(s => s.Uuid.Equals(UUID_SERVICE));
-            var characteristicResult = await service.GetCharacteristicsForUuidAsync(characteristicsUUID);
-            GattCharacteristic characteristic = characteristicResult.Characteristics.First();
-            List<byte[]> contents = new List<byte[]>();
-            contents.Add(GetFirstEnteteToSendContents());
-            contents.Add(GetSecondEnteteToSendContents(message.Text));
-            contents.Add(GetThirdEnteteToSendContents());
-            contents.Add(GetForthEnteteToSendContents());
+                //GattDeviceService service = test.Services.FirstOrDefault(s => s.Uuid.Equals(UUID_SERVICE));
+                var characteristicResult = await service.GetCharacteristicsForUuidAsync(characteristicsUUID);
+                GattCharacteristic characteristic = characteristicResult.Characteristics.First();
+                List<byte[]> contents = new List<byte[]>();
+                contents.Add(GetFirstEnteteToSendContents());
+                contents.Add(GetSecondEnteteToSendContents(message.Text));
+                contents.Add(GetThirdEnteteToSendContents());
+                contents.Add(GetForthEnteteToSendContents());
 
-            var messageInListByte = transformMessage(message.Text);
-            foreach(var paquet in messageInListByte)
-            {
-                contents.Add(paquet);
-            }
+                var messageInListByte = transformMessage(message.Text);
+                foreach (var paquet in messageInListByte)
+                {
+                    contents.Add(paquet);
+                }
 
-            foreach(var content in contents)
-            {
-                IBuffer buffer = Windows.Security.Cryptography.CryptographicBuffer.CreateFromByteArray(content);
-                await characteristic.WriteValueAsync(buffer);
+                foreach (var content in contents)
+                {
+                    IBuffer buffer = Windows.Security.Cryptography.CryptographicBuffer.CreateFromByteArray(content);
+                    await characteristic.WriteValueAsync(buffer);
+                }
+                Debug.Print("Envoye");
             }
-            Debug.Print("Envoye");
         }
 
         //TODO: Fonction qui transforme un message en tableau de byte[16]
@@ -382,6 +381,11 @@ namespace Led_Screen
             this.characterMapper.Add(" _byte", new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
         }
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
 
         }
