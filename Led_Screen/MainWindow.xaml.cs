@@ -597,7 +597,7 @@ namespace Led_Screen
             this.characterMapper.Add(" _byte", new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
 
             //Chiffres
-            this.characterMapper.Add("0_byte", new byte[] { 0, 60, 66, 66, 66, 66, 66, 66, 60, 0, 0 });
+            this.characterMapper.Add("0_byte", new byte[] { 0, 60, 66, 66, 66, 66, 66, 66, 66, 60, 0 });
             this.characterMapper.Add("1_byte", new byte[] { 0, 24, 24, 24, 24, 24, 24, 24, 24, 24, 0 });
             this.characterMapper.Add("2_byte", new byte[] { 0, 60, 66, 2, 4, 8, 16, 32, 64, 126, 0 });
             this.characterMapper.Add("3_byte", new byte[] { 0, 60, 66, 2, 4, 28, 4, 2, 66, 60, 0 });
