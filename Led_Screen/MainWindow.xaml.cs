@@ -3,22 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.Advertisement;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
-using Windows.Devices.Enumeration;
 using Windows.Storage.Streams;
 
 namespace Led_Screen
@@ -49,7 +39,7 @@ namespace Led_Screen
             InitializeComponent();
             InitWatcher();
             InitMappeur();
-            bluetoothDevicesListBox.ItemsSource = BluetoothLEDevices.Select(device => device.Name);            
+            bluetoothDevicesListBox.ItemsSource = BluetoothLEDevices.Select(device => device.Name + device.BluetoothAddress);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -74,7 +64,7 @@ namespace Led_Screen
             this.watcher.Start();
             await Task.Delay(2000);
             this.watcher.Stop();
-            bluetoothDevicesListBox.ItemsSource = BluetoothLEDevices.Select(device => device.Name);
+            bluetoothDevicesListBox.ItemsSource = BluetoothLEDevices.Select(device => device.Name + device.BluetoothAddress);
             Debug.Print("Fin de recherche");
         }
 
@@ -83,7 +73,7 @@ namespace Led_Screen
             BluetoothLEAdvertisementReceivedEventArgs args)
         {
             var device = await BluetoothLEDevice.FromBluetoothAddressAsync(args.BluetoothAddress);            
-            if (device != null && !CheckBluetoothDevicesByName(device.Name) /*&& device.Name.Equals("LSLED")*/)
+            if (device != null && !CheckBluetoothDevicesByAddress(device.BluetoothAddress) && device.Name.Equals("LSLED"))
             {
                 Debug.Print("Name :" + device.Name);
                 await Dispatcher.InvokeAsync(() => BluetoothLEDevices.Add(device));
@@ -93,11 +83,11 @@ namespace Led_Screen
 
         #endregion
 
-        private bool CheckBluetoothDevicesByName(string name)
+        private bool CheckBluetoothDevicesByAddress(ulong address)
         {
             foreach (var device in BluetoothLEDevices)
             {
-                if (device.Name.Equals(name))
+                if (device.BluetoothAddress.Equals(address))
                 {
                     return true;
                 }
@@ -189,53 +179,60 @@ namespace Led_Screen
 
         private async void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            //TODO: si check box -> on envoie a tout les ecrans led
+            //TODO: gestion erreur si false renvoye
             if (allLEDScreen.IsChecked == true)
             {
-                //TODO send to all devices
+                foreach (var device in BluetoothLEDevices)
+                {
+                    await SendToOneDeviceAsync(bluetoothDeviceSelected);
+                }
             }
             else //Send to selected device
-            { 
-                Debug.Print("Debut de l'envoie");
-
-                //TODO: test bluetoothDeviceSelected and name = LSLED NotNull
-                var test = await bluetoothDeviceSelected.GetGattServicesAsync();
-
-                GattDeviceService service = null;
-                foreach (var unService in test.Services)
-                {
-                    if (unService.Uuid.Equals(serviceUUID))
-                    {
-                        service = unService;
-                    }
-                }
-                //TODO: Test Service notNull
-
-                //GattDeviceService service = test.Services.FirstOrDefault(s => s.Uuid.Equals(UUID_SERVICE));
-                var characteristicResult = await service.GetCharacteristicsForUuidAsync(characteristicsUUID);
-                GattCharacteristic characteristic = characteristicResult.Characteristics.First();
-                List<byte[]> contents = new List<byte[]>();
-                contents.Add(GetFirstEnteteToSendContents());
-                contents.Add(GetSecondEnteteToSendContents(message.Text));
-                contents.Add(GetThirdEnteteToSendContents());
-                contents.Add(GetForthEnteteToSendContents());
-
-                var messageInListByte = transformMessage(message.Text);
-                foreach (var paquet in messageInListByte)
-                {
-                    contents.Add(paquet);
-                }
-
-                foreach (var content in contents)
-                {
-                    IBuffer buffer = Windows.Security.Cryptography.CryptographicBuffer.CreateFromByteArray(content);
-                    await characteristic.WriteValueAsync(buffer);
-                }
-                Debug.Print("Envoye");
+            {
+                await SendToOneDeviceAsync(bluetoothDeviceSelected);
             }
         }
 
-        //TODO: Fonction qui transforme un message en tableau de byte[16]
+        private async Task<bool> SendToOneDeviceAsync(BluetoothLEDevice device)
+        {
+            Debug.Print("Debut de l'envoie");
+
+            //TODO: test bluetoothDeviceSelected and name = LSLED NotNull
+            var test = await bluetoothDeviceSelected.GetGattServicesAsync();
+
+            GattDeviceService service = null;
+            foreach (var unService in test.Services)
+            {
+                if (unService.Uuid.Equals(serviceUUID))
+                {
+                    service = unService;
+                }
+            }
+            //TODO: Test Service notNull
+
+            var characteristicResult = await service.GetCharacteristicsForUuidAsync(characteristicsUUID);
+            GattCharacteristic characteristic = characteristicResult.Characteristics.First();
+            List<byte[]> contents = new List<byte[]>();
+            contents.Add(GetFirstEnteteToSendContents());
+            contents.Add(GetSecondEnteteToSendContents(message.Text));
+            contents.Add(GetThirdEnteteToSendContents());
+            contents.Add(GetForthEnteteToSendContents());
+
+            var messageInListByte = transformMessage(message.Text);
+            foreach (var paquet in messageInListByte)
+            {
+                contents.Add(paquet);
+            }
+
+            foreach (var content in contents)
+            {
+                IBuffer buffer = Windows.Security.Cryptography.CryptographicBuffer.CreateFromByteArray(content);
+                await characteristic.WriteValueAsync(buffer);
+            }
+            Debug.Print("Envoye");
+            return true;
+        }
+
         private List<byte[]> transformMessage(string mess)
         {
             var res = new List<byte[]>();
@@ -259,7 +256,7 @@ namespace Led_Screen
             {
                 nbPaquets = (int)Math.Ceiling(division);
             }
-            //var nbPaquets = (int)(mess.Length * 11 / 16) + 1;
+
             int compt = 0;
             int currentKey = 0;
             for(int i=0; i< nbPaquets; i++) {
@@ -282,7 +279,6 @@ namespace Led_Screen
                 }
                 res.Add(final);
             }
-            //puis divise en plusieurs tableau de 16 (complete le dernier avec des 0)
             return res;
         }
 
