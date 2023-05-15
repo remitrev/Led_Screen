@@ -1,4 +1,4 @@
-﻿<Window x:Class="Led_Screen.MainWindow"
+﻿<Window x:Class="Led_Screen.MainWindowView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,7 +8,7 @@
         Title="MainWindow" Height="400" Width="900">
     <Grid>
         <Button x:Name="start" Content="Search Bluetooth Devices" HorizontalAlignment="Left" VerticalAlignment="Top" Width="248" Margin="40,22,0,0" Click="Button_Click_1" Height="46"/>
-        <ListBox x:Name="bluetoothDevicesListBox" HorizontalAlignment="Left" Height="221" VerticalAlignment="Top" Width="248" Margin="40,87,0,0" SelectionChanged="ListBox_SelectionChanged_1"/>
+        <ListBox x:Name="bluetoothDevicesListBox" HorizontalAlignment="Left" Height="221" VerticalAlignment="Top" Width="248" Margin="40,87,0,0" SelectionChanged="ListBox_SelectionChanged"/>
         <Button x:Name="sendMessage" Content="Send Messages" HorizontalAlignment="Left" VerticalAlignment="Top" Width="126" Margin="498,310,0,0" Height="37" Click="Button_Click_2" IsEnabled="False"/>
         <TextBox x:Name="firstMessage" HorizontalAlignment="Left" Height="23" Margin="344,87,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox1_TextChanged"/>
         <CheckBox x:Name="allLEDScreen" Content="Envoyer a tout les ecran LED dispo?" HorizontalAlignment="Left" Margin="65,332,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked"/>

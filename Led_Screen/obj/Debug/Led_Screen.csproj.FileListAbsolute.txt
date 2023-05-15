@@ -43,11 +43,9 @@ C:\Users\p2210361\source\repos\remitrev\Led_Screen\Led_Screen\bin\Debug\System.R
 C:\Users\p2210361\source\repos\remitrev\Led_Screen\Led_Screen\bin\Debug\Windows.winmd
 C:\Users\p2210361\source\repos\remitrev\Led_Screen\Led_Screen\bin\Debug\fr\System.Runtime.WindowsRuntime.resources.dll
 C:\Users\p2210361\source\repos\remitrev\Led_Screen\Led_Screen\obj\Debug\Led_Screen.csproj.AssemblyReference.cache
-C:\Users\p2210361\source\repos\remitrev\Led_Screen\Led_Screen\obj\Debug\MainWindow.g.cs
 C:\Users\p2210361\source\repos\remitrev\Led_Screen\Led_Screen\obj\Debug\App.g.cs
 C:\Users\p2210361\source\repos\remitrev\Led_Screen\Led_Screen\obj\Debug\Led_Screen_MarkupCompile.cache
 C:\Users\p2210361\source\repos\remitrev\Led_Screen\Led_Screen\obj\Debug\Led_Screen_MarkupCompile.lref
-C:\Users\p2210361\source\repos\remitrev\Led_Screen\Led_Screen\obj\Debug\MainWindow.baml
 C:\Users\p2210361\source\repos\remitrev\Led_Screen\Led_Screen\obj\Debug\Led_Screen.g.resources
 C:\Users\p2210361\source\repos\remitrev\Led_Screen\Led_Screen\obj\Debug\Led_Screen.Properties.Resources.resources
 C:\Users\p2210361\source\repos\remitrev\Led_Screen\Led_Screen\obj\Debug\Led_Screen.csproj.GenerateResource.cache
@@ -55,3 +53,5 @@ C:\Users\p2210361\source\repos\remitrev\Led_Screen\Led_Screen\obj\Debug\Led_Scre
 C:\Users\p2210361\source\repos\remitrev\Led_Screen\Led_Screen\obj\Debug\Led_Screen.csproj.CopyComplete
 C:\Users\p2210361\source\repos\remitrev\Led_Screen\Led_Screen\obj\Debug\Led_Screen.exe
 C:\Users\p2210361\source\repos\remitrev\Led_Screen\Led_Screen\obj\Debug\Led_Screen.pdb
+C:\Users\p2210361\source\repos\remitrev\Led_Screen\Led_Screen\obj\Debug\MVVM\Views\MainWindowView.g.cs
+C:\Users\p2210361\source\repos\remitrev\Led_Screen\Led_Screen\obj\Debug\MVVM\Views\MainWindowView.baml
