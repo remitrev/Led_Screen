@@ -391,6 +391,7 @@ namespace Led_Screen
                 }
                 foreach (var device in BluetoothLEDevices)
                 {
+                    await SendToOneDeviceAsync(device);
                     try
                     {
                         await SendToOneDeviceAsync(bluetoothDeviceSelected);
@@ -623,16 +624,16 @@ namespace Led_Screen
             this.characterMapper.Add(" _byte", new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
 
             //Chiffres
-            this.characterMapper.Add("0_byte", new byte[] { 0, 60, 66, 66, 66, 66, 66, 60, 0, 0 });
-            this.characterMapper.Add("1_byte", new byte[] { 0, 24, 24, 24, 24, 24, 24, 24, 24, 24 });
-            this.characterMapper.Add("2_byte", new byte[] { 0, 60, 66, 2, 4, 8, 16, 32, 64, 126 });
-            this.characterMapper.Add("3_byte", new byte[] { 0, 60, 66, 2, 4, 28, 4, 2, 66, 60 });
-            this.characterMapper.Add("4_byte", new byte[] { 0, 4, 12, 20, 36, 68, 126, 4, 4, 4 });
-            this.characterMapper.Add("5_byte", new byte[] { 0, 126, 64, 64, 120, 2, 2, 2, 66, 60 });
-            this.characterMapper.Add("6_byte", new byte[] { 0, 28, 32, 64, 120, 66, 66, 66, 66, 60 });
-            this.characterMapper.Add("7_byte", new byte[] { 0, 126, 2, 4, 8, 16, 32, 32, 32, 32 });
-            this.characterMapper.Add("8_byte", new byte[] { 0, 60, 66, 66, 66, 60, 66, 66, 66, 60 });
-            this.characterMapper.Add("9_byte", new byte[] { 0, 60, 66, 66, 66, 62, 2, 2, 4, 56 });
+            this.characterMapper.Add("0_byte", new byte[] { 0, 60, 66, 66, 66, 66, 66, 66, 66, 60, 0 });
+            this.characterMapper.Add("1_byte", new byte[] { 0, 24, 24, 24, 24, 24, 24, 24, 24, 24, 0 });
+            this.characterMapper.Add("2_byte", new byte[] { 0, 60, 66, 2, 4, 8, 16, 32, 64, 126, 0 });
+            this.characterMapper.Add("3_byte", new byte[] { 0, 60, 66, 2, 4, 28, 4, 2, 66, 60, 0 });
+            this.characterMapper.Add("4_byte", new byte[] { 0, 4, 12, 20, 36, 68, 126, 4, 4, 4, 0 });
+            this.characterMapper.Add("5_byte", new byte[] { 0, 126, 64, 64, 120, 2, 2, 2, 66, 60, 0 });
+            this.characterMapper.Add("6_byte", new byte[] { 0, 28, 32, 64, 120, 66, 66, 66, 66, 60, 0 });
+            this.characterMapper.Add("7_byte", new byte[] { 0, 126, 2, 4, 8, 16, 32, 32, 32, 32, 0 });
+            this.characterMapper.Add("8_byte", new byte[] { 0, 60, 66, 66, 66, 60, 66, 66, 66, 60, 0 });
+            this.characterMapper.Add("9_byte", new byte[] { 0, 60, 66, 66, 66, 62, 2, 2, 4, 56, 0 });
         }
         #endregion
     }
