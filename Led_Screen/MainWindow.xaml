@@ -5,13 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Led_Screen"
         mc:Ignorable="d"
-        Title="MainWindow" Height="400" Width="500">
+        Title="MainWindow" Height="400" Width="900">
     <Grid>
-        <Button x:Name="start" Content="Search Bluetooth Devices" HorizontalAlignment="Left" VerticalAlignment="Top" Width="157" Margin="25,50,0,0" Click="Button_Click_1" Height="46"/>
-        <ListBox x:Name="bluetoothDevicesListBox" HorizontalAlignment="Left" Height="310" VerticalAlignment="Top" Width="248" Margin="203,23,0,0" SelectionChanged="ListBox_SelectionChanged_1"/>
-        <Button x:Name="sendMessage" Content="Send Message" HorizontalAlignment="Left" VerticalAlignment="Top" Width="126" Margin="25,157,0,0" Height="37" Click="Button_Click_2"/>
-        <TextBox x:Name="message" HorizontalAlignment="Left" Height="23" Margin="31,268,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged"/>
-        <CheckBox x:Name="allLEDScreen" Content="Envoyer a tout les ecran LED dispo?" HorizontalAlignment="Left" Margin="224,349,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked"/>
+        <Button x:Name="start" Content="Search Bluetooth Devices" HorizontalAlignment="Left" VerticalAlignment="Top" Width="248" Margin="40,22,0,0" Click="Button_Click_1" Height="46"/>
+        <ListBox x:Name="bluetoothDevicesListBox" HorizontalAlignment="Left" Height="221" VerticalAlignment="Top" Width="248" Margin="40,87,0,0" SelectionChanged="ListBox_SelectionChanged_1"/>
+        <Button x:Name="sendMessage" Content="Send Messages" HorizontalAlignment="Left" VerticalAlignment="Top" Width="126" Margin="533,310,0,0" Height="37" Click="Button_Click_2"/>
+        <TextBox x:Name="firstMessage" HorizontalAlignment="Left" Height="23" Margin="344,87,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox1_TextChanged"/>
+        <CheckBox x:Name="allLEDScreen" Content="Envoyer a tout les ecran LED dispo?" HorizontalAlignment="Left" Margin="65,332,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked"/>
+        <Label Content="1er Message" HorizontalAlignment="Left" Margin="352,42,0,0" VerticalAlignment="Top" Width="103"/>
+        <TextBox x:Name="secondMessage" HorizontalAlignment="Left" Height="23" Margin="498,87,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox2_TextChanged" IsReadOnly="True"/>
+        <Label Content="2ème Message" HorizontalAlignment="Left" Margin="506,42,0,0" VerticalAlignment="Top" Width="103"/>
+        <TextBox x:Name="thirdMessage" HorizontalAlignment="Left" Height="23" Margin="655,87,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox3_TextChanged" IsReadOnly="True"/>
+        <Label Content="3ème Message" HorizontalAlignment="Left" Margin="663,42,0,0" VerticalAlignment="Top" Width="103"/>
+        <TextBox x:Name="forthMessage" HorizontalAlignment="Left" Height="23" Margin="344,191,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox4_TextChanged" IsReadOnly="True"/>
+        <Label Content="4ème Message" HorizontalAlignment="Left" Margin="352,146,0,0" VerticalAlignment="Top" Width="103"/>
+        <TextBox x:Name="_5Message" HorizontalAlignment="Left" Height="23" Margin="498,191,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox5_TextChanged" IsReadOnly="True"/>
+        <Label Content="5ème Message" HorizontalAlignment="Left" Margin="506,146,0,0" VerticalAlignment="Top" Width="103"/>
+        <TextBox x:Name="_6Message" HorizontalAlignment="Left" Height="23" Margin="655,191,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox6_TextChanged" IsReadOnly="True"/>
+        <Label Content="6ème Message" HorizontalAlignment="Left" Margin="663,146,0,0" VerticalAlignment="Top" Width="103"/>
+        <TextBox x:Name="_7Message" HorizontalAlignment="Left" Height="23" Margin="416,275,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox7_TextChanged" IsReadOnly="True"/>
+        <Label Content="7ème Message" HorizontalAlignment="Left" Margin="424,230,0,0" VerticalAlignment="Top" Width="103"/>
+        <TextBox x:Name="_8Message" HorizontalAlignment="Left" Height="23" Margin="596,275,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox8_TextChanged" IsReadOnly="True"/>
+        <Label Content="8ème Message" HorizontalAlignment="Left" Margin="604,230,0,0" VerticalAlignment="Top" Width="103"/>
 
     </Grid>
 </Window>

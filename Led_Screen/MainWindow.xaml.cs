@@ -223,11 +223,11 @@ namespace Led_Screen
             GattCharacteristic characteristic = characteristicResult.Characteristics.First();
             List<byte[]> contents = new List<byte[]>();
             contents.Add(GetFirstEnteteToSendContents());
-            contents.Add(GetSecondEnteteToSendContents(message.Text));
+            contents.Add(GetSecondEnteteToSendContents(firstMessage.Text));
             contents.Add(GetThirdEnteteToSendContents());
             contents.Add(GetForthEnteteToSendContents());
 
-            var messageInListByte = transformMessage(message.Text);
+            var messageInListByte = transformMessage(firstMessage.Text);
             foreach (var paquet in messageInListByte)
             {
                 contents.Add(paquet);
@@ -386,12 +386,105 @@ namespace Led_Screen
             this.characterMapper.Add("~_byte", new byte[] { 0, 0, 40, 68, 0, 0, 0, 0, 0, 0, 0 });
             this.characterMapper.Add(" _byte", new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
         }
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+
+        private void TextBox1_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (firstMessage.Text == "")
+            {
+                secondMessage.IsReadOnly = true;
+                secondMessage.Text = "";
+            }
+            else
+            {
+                secondMessage.IsReadOnly = false;
+            }
+        }
+
+        private void TextBox2_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (secondMessage.Text == "")
+            {
+                thirdMessage.IsReadOnly = true;
+                thirdMessage.Text = "";
+            }
+            else
+            {
+                thirdMessage.IsReadOnly = false;
+            }
+        }
+
+        private void TextBox3_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (thirdMessage.Text == "")
+            {
+                forthMessage.IsReadOnly = true;
+                forthMessage.Text = "";
+            }
+            else
+            {
+                forthMessage.IsReadOnly = false;
+            }
+        }
+
+        private void TextBox4_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (forthMessage.Text == "")
+            {
+                _5Message.IsReadOnly = true;
+                _5Message.Text = "";
+            }
+            else
+            {
+                _5Message.IsReadOnly = false;
+            }
+        }
+
+        private void TextBox5_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (_5Message.Text == "")
+            {
+                _6Message.IsReadOnly = true;
+                _6Message.Text = "";
+            }
+            else
+            {
+                _6Message.IsReadOnly = false;
+            }
+        }
+
+        private void TextBox6_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (_6Message.Text == "")
+            {
+                _7Message.IsReadOnly = true;
+                _7Message.Text = "";
+            }
+            else
+            {
+                _7Message.IsReadOnly = false;
+            }
+        }
+
+        private void TextBox7_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (_7Message.Text == "")
+            {
+                _8Message.IsReadOnly = true;
+                _8Message.Text = "";
+            }
+            else
+            {
+                _8Message.IsReadOnly = false;
+            }
+        }
+
+        private void TextBox8_TextChanged(object sender, TextChangedEventArgs e)
         {
 
         }
