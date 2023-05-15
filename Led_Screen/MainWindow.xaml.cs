@@ -39,7 +39,7 @@ namespace Led_Screen
             InitializeComponent();
             InitWatcher();
             InitMappeur();
-            bluetoothDevicesListBox.ItemsSource = BluetoothLEDevices.Select(device => device.Name + device.BluetoothAddress);
+            bluetoothDevicesListBox.ItemsSource = BluetoothLEDevices.Select(device => device.Name + " :" + device.BluetoothAddress);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -64,7 +64,7 @@ namespace Led_Screen
             this.watcher.Start();
             await Task.Delay(2000);
             this.watcher.Stop();
-            bluetoothDevicesListBox.ItemsSource = BluetoothLEDevices.Select(device => device.Name + device.BluetoothAddress);
+            bluetoothDevicesListBox.ItemsSource = BluetoothLEDevices.Select(device => device.Name + " :" + device.BluetoothAddress);
             Debug.Print("Fin de recherche");
         }
 
