@@ -19,6 +19,7 @@ namespace Led_Screen
             InitializeComponent();
             viewModel = new MainWindowViewModel();
             DataContext = viewModel;
+            historique.ItemsSource = viewModel.allContents;
             bluetoothDevicesListBox.ItemsSource = viewModel.BluetoothLEDevices.Select(device => device.Name + " :" + device.BluetoothAddress);
         }
 
@@ -29,10 +30,15 @@ namespace Led_Screen
 
         private async void Button_Click_1(object sender, RoutedEventArgs e)
         {
+            noDevices.Visibility = Visibility.Hidden;
             errorMessage.Visibility = Visibility.Hidden;
             viewModel.BluetoothLEDevices.Clear();
             await viewModel.Start_SearchAsync();
             bluetoothDevicesListBox.ItemsSource = viewModel.BluetoothLEDevices.Select(device => device.Name + " :" + device.BluetoothAddress);
+            if(bluetoothDevicesListBox.Items.Count == 0)
+            {
+                noDevices.Visibility = Visibility.Visible;
+            }
         }
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -50,8 +56,6 @@ namespace Led_Screen
         private async void Button_Click_2(object sender, RoutedEventArgs e)
         {
             //Reset label error
-            errorOnTryCatch.Content = "";
-            errorOnTryCatch.Visibility = Visibility.Hidden;
             errorMessage.Visibility = Visibility.Hidden;
 
             if (allLEDScreen.IsChecked == true)
@@ -64,12 +68,11 @@ namespace Led_Screen
 
                 try
                 {
-                    await viewModel.SendToAllDevices(TransformMessagesTextBox());
+                    await viewModel.SendToAllDevices(TransformMessagesTextBox(), tag.Text);
                 }
                 catch (Exception exc)
                 {
-                    errorOnTryCatch.Content = exc.Message;
-                    errorOnTryCatch.Visibility = Visibility.Visible;
+                    Debug.Print(exc.Message);
                 }
                 
             }
@@ -79,12 +82,11 @@ namespace Led_Screen
                 {
                     try
                     {
-                        await viewModel.SendToSelectedDevice(TransformMessagesTextBox());
+                        await viewModel.SendToSelectedDevice(TransformMessagesTextBox(), tag.Text);
                     }
                     catch (Exception exc)
                     {
-                        errorOnTryCatch.Content = exc.Message;
-                        errorOnTryCatch.Visibility = Visibility.Visible;
+                        Debug.Print(exc.Message);
                     }
                 } else
                 {
@@ -92,6 +94,8 @@ namespace Led_Screen
                     Debug.Print("pas de devices");
                 }
             }
+            viewModel.FilterAndOrderHistorique(tagFilter.Text, "lastUse");
+            historique.ItemsSource = viewModel.allContents;
         }   
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
@@ -101,18 +105,17 @@ namespace Led_Screen
 
 
         private void TextBox1_TextChanged(object sender, TextChangedEventArgs e)
-        {
+        { 
             if (firstMessage.Text == "")
             {
                 secondMessage.IsReadOnly = true;
                 secondMessage.Text = "";
-                sendMessage.IsEnabled = false;
             }
             else
             {
                 secondMessage.IsReadOnly = false;
-                sendMessage.IsEnabled = true;
             }
+            CheckButtonSearchDiplay();
         }
 
         private void TextBox2_TextChanged(object sender, TextChangedEventArgs e)
@@ -198,6 +201,12 @@ namespace Led_Screen
 
         }
 
+        private void TextBoxTag_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            CheckButtonSearchDiplay();
+        }
+
+
         private List<string> TransformMessagesTextBox()
         {
             List<string> messages = new List<string>();
@@ -210,6 +219,35 @@ namespace Led_Screen
             messages.Add(_7Message.Text);
             messages.Add(_8Message.Text);
             return messages;
+        }
+
+        private void CheckButtonSearchDiplay()
+        {
+            if(firstMessage.Text != "" && tag.Text != "")
+            {
+                sendMessage.IsEnabled = true;
+            } else
+            {
+                sendMessage.IsEnabled = false;
+            }
+        }
+
+        private void Button_Click_LastUse(object sender, RoutedEventArgs e)
+        {
+            viewModel.FilterAndOrderHistorique(tagFilter.Text, "lastUse");
+            historique.ItemsSource = viewModel.allContents;
+        }
+
+        private void Button_Click_CreateDate(object sender, RoutedEventArgs e)
+        {
+            viewModel.FilterAndOrderHistorique(tagFilter.Text, "create");
+            historique.ItemsSource = viewModel.allContents;
+        }
+
+        private void TextBox_TextChanged_TagFilter(object sender, TextChangedEventArgs e)
+        {
+            viewModel.FilterAndOrderHistorique(tagFilter.Text, "lastUse");
+            historique.ItemsSource = viewModel.allContents;
         }
     }
 }

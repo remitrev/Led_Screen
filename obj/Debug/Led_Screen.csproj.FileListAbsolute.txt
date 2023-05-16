@@ -207,7 +207,6 @@ D:\Led_Screen\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
 D:\Led_Screen\bin\Debug\System.Threading.Tasks.Extensions.xml
 D:\Led_Screen\bin\Debug\fr\System.Runtime.WindowsRuntime.resources.dll
 D:\Led_Screen\obj\Debug\Led_Screen.csproj.AssemblyReference.cache
-D:\Led_Screen\obj\Debug\Led_Screen.csproj.SuggestedBindingRedirects.cache
 D:\Led_Screen\obj\Debug\Led_Screen.exe.config
 D:\Led_Screen\obj\Debug\MVVM\Views\MainWindowView.g.cs
 D:\Led_Screen\obj\Debug\App.g.cs
@@ -221,3 +220,5 @@ D:\Led_Screen\obj\Debug\Led_Screen.csproj.CoreCompileInputs.cache
 D:\Led_Screen\obj\Debug\Led_Screen.csproj.CopyComplete
 D:\Led_Screen\obj\Debug\Led_Screen.exe
 D:\Led_Screen\obj\Debug\Led_Screen.pdb
+D:\Led_Screen\bin\Debug\MySqlConnector.dll
+D:\Led_Screen\bin\Debug\MySqlConnector.xml

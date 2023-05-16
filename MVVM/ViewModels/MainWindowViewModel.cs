@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Led_Screen.MVVM.Models;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -16,6 +17,7 @@ namespace Led_Screen.MVVM.ViewModels
     {
         public ObservableCollection<BluetoothLEDevice> BluetoothLEDevices { get; set; }
         public BluetoothLEDevice bluetoothDeviceSelected { get; set; }
+        public List<string> allContents { get; set; }
 
         #region private data
         private BluetoothLEAdvertisementWatcher watcher;
@@ -24,15 +26,35 @@ namespace Led_Screen.MVVM.ViewModels
         private String UUID_SERVICE = "fee0";
         private Guid serviceUUID = Guid.Parse("0000fee0-0000-1000-8000-00805f9b34fb");
         private Guid characteristicsUUID = Guid.Parse("0000fee1-0000-1000-8000-00805f9b34fb");
+        private MainModel mainModel;
         #endregion private
 
         public MainWindowViewModel()
         {
+            mainModel = new MainModel();
+            getListContent();
             BluetoothLEDevices = new ObservableCollection<BluetoothLEDevice>();
             bluetoothDeviceSelected = null;
             InitWatcher();
             InitMappeur();
         }
+
+        public void FilterAndOrderHistorique(string filter, string order)
+        {
+            //TODO: enlever allContents et rendre Messages in model Obervable puis mettre dans la liste dans la liste box avec le tag!
+            mainModel.ApplyFilterOrOrderOnList(filter, order);
+            getListContent();
+        }
+
+        private void getListContent()
+        {
+            allContents = new List<string>();
+            List<Message> messages = mainModel.AllMessages;
+            foreach (var message in messages)
+            {
+                allContents.Add(message.Content);
+            }
+        } 
 
         #region Search Bluetooth Device
         public async Task Start_SearchAsync()
@@ -90,16 +112,16 @@ namespace Led_Screen.MVVM.ViewModels
 
         #region Send Messages to devices
 
-        public async Task SendToSelectedDevice(List<string> messages)
+        public async Task SendToSelectedDevice(List<string> messages, string tag)
         {
-            await SendToOneDeviceAsync(bluetoothDeviceSelected, messages);
+            await SendToOneDeviceAsync(bluetoothDeviceSelected, messages, tag);
         }
 
-        public async Task SendToAllDevices(List<string> messages)
+        public async Task SendToAllDevices(List<string> messages, string tag)
         {
             foreach (var device in BluetoothLEDevices)
             {
-                await SendToOneDeviceAsync(device, messages);
+                await SendToOneDeviceAsync(device, messages, tag);
             }
         }
 
@@ -247,9 +269,11 @@ namespace Led_Screen.MVVM.ViewModels
         #endregion
 
         #region private methods
-        private async Task SendToOneDeviceAsync(BluetoothLEDevice device, List<string> messages)
+        private async Task SendToOneDeviceAsync(BluetoothLEDevice device, List<string> messages, string tag)
         {
-            //TODO: transforme list string en plusieurs messages (voir quand model créer)
+            //Create in DB and in list
+            mainModel.CreateOrUpdateMessages(messages, tag);
+
             if (messages[0] == "")
             {
                 throw new Exception("No message to send");
@@ -288,9 +312,11 @@ namespace Led_Screen.MVVM.ViewModels
                 await characteristic.WriteValueAsync(buffer);
             }
             Debug.Print("Envoye");
+
+
         }
 
-        private List<byte[]> transformMessage(List<String> messages)
+        private List<byte[]> transformMessage(List<string> messages)
         {
             var res = new List<byte[]>();
             var temp = new List<byte[]>();
@@ -301,13 +327,17 @@ namespace Led_Screen.MVVM.ViewModels
             foreach (var c in mess)
             {
                 byte[] content = new byte[11];
-                //Init à 0 si on ne trouve pas le caractère dans le code
-                for (int i = 0; i < 11; i++)
-                {
-                    content[i] = 0;
-                }
+                
 
                 this.characterMapper.TryGetValue(c + "_byte", out content);
+                //Si on ne connait pas le caractère on le remplace par un caractère vide
+                if (content == null)
+                {
+                    for (int i = 0; i < 11; i++)
+                    {
+                        content[i] = 0;
+                    }
+                }
                 temp.Add(content);
             }
             double division = mess.Length * 11.0 / 16.0;
@@ -340,7 +370,7 @@ namespace Led_Screen.MVVM.ViewModels
                     }
                     else
                     {
-                        final[i] = 0;
+                        final[i2] = 0;
                     }
                 }
                 res.Add(final);
@@ -412,7 +442,7 @@ namespace Led_Screen.MVVM.ViewModels
             this.characterMapper.Add("y_byte", new byte[] { 0, 0, 68, 68, 68, 60, 4, 4, 24, 0, 0 });
             this.characterMapper.Add("z_byte", new byte[] { 0, 0, 126, 64, 32, 16, 8, 4, 126, 0, 0 });
 
-            //Syboles and ponctuations
+            //Symboles et ponctuations
             this.characterMapper.Add("!_byte", new byte[] { 0, 0, 0, 126, 0, 0, 0, 0, 0, 0, 0 });
             this.characterMapper.Add("\"_byte", new byte[] { 0, 6, 6, 0, 0, 0, 0, 0, 0, 0, 0 });
             this.characterMapper.Add("#_byte", new byte[] { 0, 20, 126, 20, 20, 126, 20, 0, 0, 0, 0 });
