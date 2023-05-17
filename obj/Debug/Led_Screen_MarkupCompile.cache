@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-W:\Led_Screen\obj\Debug\
+D:\Led_Screen\obj\Debug\
 Led_Screen
 none
 false
 DEBUG;TRACE
-W:\Led_Screen\App.xaml
+D:\Led_Screen\App.xaml
 15682158
 
-9-1295947656
-168-244057443
+8-453588289
+168-297892709
 MVVM\Views\MainWindowView.xaml;
 
-True
+False
 
