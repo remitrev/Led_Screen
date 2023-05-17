@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Led_Screen.MVVM.Models
 {
@@ -33,7 +34,12 @@ namespace Led_Screen.MVVM.Models
 
         public void ApplyFilterOrOrderOnList(string filter, string order)
         {
-            AllMessages = new ObservableCollection<Message>(GetFilteredAndOrderMessages(filter, order));
+            AllMessages.Clear();
+
+            foreach (var message in GetFilteredAndOrderMessages(filter, order))
+            {
+                Application.Current.Dispatcher.Invoke(() => AllMessages.Add(message));
+            }
         }
 
         #region Private methods
@@ -41,15 +47,15 @@ namespace Led_Screen.MVVM.Models
         {
             if(AllMessages.ToList().Exists(mess => mess.Tag.Equals(tag) && mess.Content.Equals(content))){
                 var message = AllMessages.ToList().Find(mess => mess.Tag.Equals(tag) && mess.Content.Equals(content));
-                AllMessages.Remove(message);
+                Application.Current.Dispatcher.Invoke(() => AllMessages.Remove(message));
                 message.UpdateLastUpdate(DateTime.Now);
                 UpdateMessageInDb(message);
-                AllMessages.Add(message);
+                Application.Current.Dispatcher.Invoke(() => AllMessages.Add(message));
             } else
             {
                 var message = new Message(Guid.NewGuid(), content, tag, DateTime.Now, DateTime.Now);
                 AddMessageInDB(message);
-                AllMessages.Add(message);
+                Application.Current.Dispatcher.Invoke(() => AllMessages.Add(message));
             }
         }
         private List<Message> GetMessagesInDB()
