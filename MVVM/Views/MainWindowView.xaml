@@ -5,38 +5,91 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Led_Screen"
         mc:Ignorable="d"
-        Title="MainWindow" Height="400" Width="1100">
-    <Grid>
-        <Button x:Name="start" Content="Search Bluetooth Devices" HorizontalAlignment="Left" VerticalAlignment="Top" Width="248" Margin="40,22,0,0" Click="Button_Click_1" Height="46"/>
-        <ListBox x:Name="bluetoothDevicesListBox" HorizontalAlignment="Left" Height="221" VerticalAlignment="Top" Width="248" Margin="40,87,0,0" SelectionChanged="ListBox_SelectionChanged"/>
-        <Button x:Name="sendMessage" Content="Send Messages" HorizontalAlignment="Left" VerticalAlignment="Top" Width="126" Margin="498,310,0,0" Height="37" Click="Button_Click_2" IsEnabled="False"/>
-        <TextBox x:Name="firstMessage" HorizontalAlignment="Left" Height="23" Margin="344,87,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox1_TextChanged" AllowDrop="True"/>
-        <CheckBox x:Name="allLEDScreen" Content="Envoyer a tout les ecran LED dispo?" HorizontalAlignment="Left" Margin="61,343,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked"/>
-        <Label Content="1er Message" HorizontalAlignment="Left" Margin="352,42,0,0" VerticalAlignment="Top" Width="103"/>
-        <TextBox x:Name="secondMessage" HorizontalAlignment="Left" Height="23" Margin="498,87,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox2_TextChanged" IsReadOnly="True"/>
-        <Label Content="2ème Message" HorizontalAlignment="Left" Margin="506,42,0,0" VerticalAlignment="Top" Width="103"/>
-        <TextBox x:Name="thirdMessage" HorizontalAlignment="Left" Height="23" Margin="655,87,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox3_TextChanged" IsReadOnly="True"/>
-        <Label Content="3ème Message" HorizontalAlignment="Left" Margin="663,42,0,0" VerticalAlignment="Top" Width="103"/>
-        <TextBox x:Name="forthMessage" HorizontalAlignment="Left" Height="23" Margin="344,191,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox4_TextChanged" IsReadOnly="True"/>
-        <Label Content="4ème Message" HorizontalAlignment="Left" Margin="352,146,0,0" VerticalAlignment="Top" Width="103"/>
-        <TextBox x:Name="_5Message" HorizontalAlignment="Left" Height="23" Margin="498,191,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox5_TextChanged" IsReadOnly="True"/>
-        <Label Content="5ème Message" HorizontalAlignment="Left" Margin="506,146,0,0" VerticalAlignment="Top" Width="103"/>
-        <TextBox x:Name="_6Message" HorizontalAlignment="Left" Height="23" Margin="655,191,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox6_TextChanged" IsReadOnly="True"/>
-        <Label Content="6ème Message" HorizontalAlignment="Left" Margin="663,146,0,0" VerticalAlignment="Top" Width="103"/>
-        <TextBox x:Name="_7Message" HorizontalAlignment="Left" Height="23" Margin="344,275,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox7_TextChanged" IsReadOnly="True"/>
-        <Label Content="7ème Message" HorizontalAlignment="Left" Margin="352,230,0,0" VerticalAlignment="Top" Width="103"/>
-        <TextBox x:Name="_8Message" HorizontalAlignment="Left" Height="23" Margin="490,275,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox8_TextChanged" IsReadOnly="True"/>
-        <Label Content="8ème Message" HorizontalAlignment="Left" Margin="498,230,0,0" VerticalAlignment="Top" Width="103"/>
-        <Label x:Name="errorMessage" Content="Pas d'écrans Led sélectionné" HorizontalAlignment="Left" Margin="312,326,0,0" VerticalAlignment="Top" Width="168" Height="29" Background="Red" Visibility="Hidden"/>
-        <TextBox x:Name="tag" HorizontalAlignment="Left" Height="22" Margin="654,276,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBoxTag_TextChanged"/>
-        <Label Content="Choisir un Tag pour les messages" HorizontalAlignment="Left" Margin="622,230,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="noDevices" Content="Pas d'appareils diponibles" HorizontalAlignment="Left" Margin="83,308,0,0" VerticalAlignment="Top" Background="Red" Height="30" Width="149" Visibility="Hidden"/>
-        <ListBox x:Name="historique" HorizontalAlignment="Left" Height="230" Margin="850,87,0,0" VerticalAlignment="Top" Width="210"/>
-        <Label Content="Historique des messages" HorizontalAlignment="Left" Margin="894,329,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="tagFilter" HorizontalAlignment="Left" Height="23" Margin="850,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" TextChanged="TextBox_TextChanged_TagFilter"/>
-        <Button Content="Trier par date&#xD;&#xA; de création" HorizontalAlignment="Left" Margin="960,10,0,0" VerticalAlignment="Top" Width="110" Height="33" Click="Button_Click_CreateDate"/>
-        <Button Content="Trier par date &#xD;&#xA;d'utilisation" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Margin="960,48,0,0" Click="Button_Click_LastUse" Height="33"/>
-        <Label Content="Filter par Tags" HorizontalAlignment="Left" Margin="850,10,0,0" VerticalAlignment="Top" Height="30" Width="104"/>
+        Title="MainWindow" Height="400" Width="1100" ResizeMode="NoResize">
+    <Window.Resources>
+        <Style x:Key="CustomButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF3498DB" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Padding" Value="10,5" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#33000000" ShadowDepth="2" BlurRadius="5" />
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#3C82B5" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="LessImportantButtonStyle" TargetType="Button" BasedOn="{StaticResource CustomButtonStyle}">
+            <Setter Property="Background" Value="#E5E5E5" />
+            <Setter Property="Foreground" Value="#333333" />
+            <Setter Property="Effect" Value="{x:Null}" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#C0C0C0" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="DescriptionLabelStyle" TargetType="Label">
+            <Setter Property="Foreground" Value="#666666" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Margin" Value="0,0,0,5" />
+        </Style>
+        <Style x:Key="HintLabelStyle" TargetType="Label">
+            <Setter Property="Foreground" Value="#FF555555" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Visibility" Value="Hidden" />
+            <Setter Property="Margin" Value="0,5,0,0" />
+        </Style>
 
+    </Window.Resources>
+    <Grid>
+        <CheckBox x:Name="allLEDScreen" Content="Envoyer a tout les ecran LED dispo?" HorizontalAlignment="Left" Margin="61,343,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked"/>
+
+        <!--ListBox-->
+        <ListBox x:Name="bluetoothDevicesListBox" HorizontalAlignment="Left" Height="221" VerticalAlignment="Top" Width="248" Margin="40,87,0,0" SelectionChanged="ListBox_SelectionChanged"/>
+        <ListBox x:Name="historique" HorizontalAlignment="Left" Height="230" Margin="850,87,0,0" VerticalAlignment="Top" Width="210"/>
+
+        <!--TextBox-->
+        <TextBox x:Name="firstMessage" HorizontalAlignment="Left" Height="23" Margin="344,87,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox1_TextChanged" AllowDrop="True"/>
+        <TextBox x:Name="secondMessage" HorizontalAlignment="Left" Height="23" Margin="498,87,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox2_TextChanged" IsReadOnly="True"/>
+        <TextBox x:Name="thirdMessage" HorizontalAlignment="Left" Height="23" Margin="655,87,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox3_TextChanged" IsReadOnly="True"/>
+        <TextBox x:Name="forthMessage" HorizontalAlignment="Left" Height="23" Margin="344,191,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox4_TextChanged" IsReadOnly="True"/>
+        <TextBox x:Name="_5Message" HorizontalAlignment="Left" Height="23" Margin="498,191,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox5_TextChanged" IsReadOnly="True"/>
+        <TextBox x:Name="_6Message" HorizontalAlignment="Left" Height="23" Margin="655,191,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox6_TextChanged" IsReadOnly="True"/>
+        <TextBox x:Name="_7Message" HorizontalAlignment="Left" Height="23" Margin="344,275,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox7_TextChanged" IsReadOnly="True"/>
+        <TextBox x:Name="_8Message" HorizontalAlignment="Left" Height="23" Margin="490,275,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBox8_TextChanged" IsReadOnly="True"/>
+
+        <TextBox x:Name="tag" HorizontalAlignment="Left" Height="22" Margin="654,276,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="TextBoxTag_TextChanged"/>
+        <TextBox x:Name="tagFilter" HorizontalAlignment="Left" Height="23" Margin="850,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" TextChanged="TextBox_TextChanged_TagFilter"/>
+
+        <!--Buttons-->
+        <Button x:Name="start" Content="Search Bluetooth Devices" HorizontalAlignment="Left" VerticalAlignment="Top" Width="248" Margin="40,22,0,0" Click="Button_Click_1" Height="46" Style="{StaticResource CustomButtonStyle}"/>
+        <Button x:Name="sendMessage" Content="Send Messages" HorizontalAlignment="Left" VerticalAlignment="Top" Width="132" Margin="498,310,0,0" Height="45" Click="Button_Click_2" IsEnabled="False" Style="{StaticResource CustomButtonStyle}"/>
+        <Button Content="Date de création" HorizontalAlignment="Left" Margin="960,10,0,0" VerticalAlignment="Top" Width="110" Height="33" Click="Button_Click_CreateDate" Style="{StaticResource LessImportantButtonStyle}"/>
+        <Button Content="Date d'utilisation" HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Margin="960,48,0,0" Click="Button_Click_LastUse" Height="33" Style="{StaticResource LessImportantButtonStyle}"/>
+
+        <!--Labels-->
+        <Label Style="{StaticResource DescriptionLabelStyle}" Content="1er Message" HorizontalAlignment="Left" Margin="352,42,0,0" VerticalAlignment="Top" Width="103"/>
+        <Label Style="{StaticResource DescriptionLabelStyle}" Content="2ème Message" HorizontalAlignment="Left" Margin="506,42,0,0" VerticalAlignment="Top" Width="103"/>
+        <Label Style="{StaticResource DescriptionLabelStyle}" Content="3ème Message" HorizontalAlignment="Left" Margin="663,42,0,0" VerticalAlignment="Top" Width="103"/>
+        <Label Style="{StaticResource DescriptionLabelStyle}" Content="4ème Message" HorizontalAlignment="Left" Margin="352,146,0,0" VerticalAlignment="Top" Width="103"/>
+        <Label Style="{StaticResource DescriptionLabelStyle}" Content="5ème Message" HorizontalAlignment="Left" Margin="506,146,0,0" VerticalAlignment="Top" Width="103"/>
+        <Label Style="{StaticResource DescriptionLabelStyle}" Content="6ème Message" HorizontalAlignment="Left" Margin="663,146,0,0" VerticalAlignment="Top" Width="103"/>
+        <Label Style="{StaticResource DescriptionLabelStyle}" Content="7ème Message" HorizontalAlignment="Left" Margin="352,230,0,0" VerticalAlignment="Top" Width="103"/>
+        <Label Style="{StaticResource DescriptionLabelStyle}" Content="8ème Message" HorizontalAlignment="Left" Margin="498,230,0,0" VerticalAlignment="Top" Width="103"/>
+        
+        <Label Style="{StaticResource DescriptionLabelStyle}" Content="Choisir un Tag pour les messages" HorizontalAlignment="Left" Margin="622,230,0,0" VerticalAlignment="Top"/>
+        <Label Style="{StaticResource DescriptionLabelStyle}" Content="Historique des messages" HorizontalAlignment="Left" Margin="894,329,0,0" VerticalAlignment="Top"/>
+        <Label Style="{StaticResource DescriptionLabelStyle}" Content="Filter par Tags" HorizontalAlignment="Left" Margin="850,10,0,0" VerticalAlignment="Top" Height="30" Width="104"/>
+
+        <Label Style="{StaticResource HintLabelStyle}" x:Name="errorMessage" Content="Pas d'écrans Led sélectionné" HorizontalAlignment="Left" Margin="312,326,0,0" VerticalAlignment="Top" Width="168" Height="29" Background="Red" Visibility="Hidden"/>
+        <Label Style="{StaticResource HintLabelStyle}" x:Name="noDevices" Content="Pas d'appareils diponibles" HorizontalAlignment="Left" Margin="83,308,0,0" VerticalAlignment="Top" Background="Red" Height="30" Width="149" Visibility="Hidden"/>
     </Grid>
+
 </Window>
