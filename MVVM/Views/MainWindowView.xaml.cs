@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Led_Screen
 {
@@ -19,7 +20,7 @@ namespace Led_Screen
             InitializeComponent();
             viewModel = new MainWindowViewModel();
             DataContext = viewModel;
-            historique.ItemsSource = viewModel.mainModel.AllMessages.Select(message => message.Content + " ,tag: " + message.Tag);
+            historique.ItemsSource = viewModel.mainModel.AllMessages.Select(message => message.Content);
             bluetoothDevicesListBox.ItemsSource = viewModel.BluetoothLEDevices.Select(device => device.Name + " :" + device.BluetoothAddress);
         }
 
@@ -245,5 +246,41 @@ namespace Led_Screen
         {
             viewModel.FilterAndOrderHistorique(tagFilter.Text, "lastUse");
         }
+
+        private void ListBoxItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            ListBoxItem listBoxItem = sender as ListBoxItem;
+            string selectedText = listBoxItem?.Content.ToString();
+
+            if (!string.IsNullOrEmpty(selectedText))
+            {
+                DragDrop.DoDragDrop(listBoxItem, selectedText, DragDropEffects.Copy);
+            }
+        }
+
+        #region drag and drop
+        private void TextBox_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.Text))
+                e.Effects = DragDropEffects.Copy;
+            else
+                e.Effects = DragDropEffects.None;
+        }
+
+        private void TextBox_DragOver(object sender, DragEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void TextBox_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.Text))
+            {
+                TextBox textBox = (TextBox)sender;
+                string droppedText = (string)e.Data.GetData(DataFormats.Text);
+                textBox.Text = droppedText;
+            }
+        }
+        #endregion
     }
 }

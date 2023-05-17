@@ -61,7 +61,13 @@
 
         <!--ListBox-->
         <ListBox x:Name="bluetoothDevicesListBox"  Height="221"  Width="248" Margin="40,87,638.577,63" SelectionChanged="ListBox_SelectionChanged"/>
-        <ListBox x:Name="historique"  Height="230" Margin="635,25,81.577,116"  Width="210"/>
+        <ListBox x:Name="historique" Height="230" Margin="635,25,81.577,116" Width="210">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ListBoxItem_PreviewMouseLeftButtonDown" />
+                </Style>
+            </ListBox.ItemContainerStyle>
+        </ListBox>
 
         <!--TextBox-->
         <TextBox x:Name="tag"  Height="22" Margin="323,268,483.577,81" TextWrapping="Wrap"  Width="120" TextChanged="TextBoxTag_TextChanged"/>
@@ -100,14 +106,14 @@
                 <RowDefinition Height="23" />
             </Grid.RowDefinitions>
 
-            <TextBox x:Name="firstMessage"  Height="23" TextWrapping="Wrap"  Width="120" TextChanged="TextBox1_TextChanged" AllowDrop="True" Grid.Column="1" Grid.Row="1"/>
-            <TextBox x:Name="secondMessage"  Height="23" TextWrapping="Wrap"  Width="120" TextChanged="TextBox2_TextChanged" IsReadOnly="True" Grid.Column="1" Grid.Row="2"/>
-            <TextBox x:Name="thirdMessage"  Height="23" TextWrapping="Wrap"  Width="120" TextChanged="TextBox3_TextChanged" IsReadOnly="True" Grid.Column="1" Grid.Row="3"/>
-            <TextBox x:Name="forthMessage"  Height="23" TextWrapping="Wrap"  Width="120" TextChanged="TextBox4_TextChanged" IsReadOnly="True" Grid.Column="1" Grid.Row="4"/>
-            <TextBox x:Name="_5Message"  Height="23" TextWrapping="Wrap"  Width="120" TextChanged="TextBox5_TextChanged" IsReadOnly="True" Grid.Column="1" Grid.Row="5"/>
-            <TextBox x:Name="_6Message"  Height="23" TextWrapping="Wrap"  Width="120" TextChanged="TextBox6_TextChanged" IsReadOnly="True" Grid.Column="1" Grid.Row="6"/>
-            <TextBox x:Name="_7Message"  Height="23" TextWrapping="Wrap"  Width="120" TextChanged="TextBox7_TextChanged" IsReadOnly="True" Grid.Column="1" Grid.Row="7"/>
-            <TextBox x:Name="_8Message"  Height="23" TextWrapping="Wrap"  Width="120" TextChanged="TextBox8_TextChanged" IsReadOnly="True" Grid.Column="1" Grid.Row="8"/>
+            <TextBox x:Name="firstMessage"  Height="23" TextWrapping="Wrap"  Width="120" TextChanged="TextBox1_TextChanged" Grid.Column="1" Grid.Row="1" AllowDrop="True" DragEnter="TextBox_DragEnter" DragOver="TextBox_DragOver" Drop="TextBox_Drop"/>
+            <TextBox x:Name="secondMessage"  Height="23" TextWrapping="Wrap"  Width="120" TextChanged="TextBox2_TextChanged" IsReadOnly="True" Grid.Column="1" Grid.Row="2" AllowDrop="True" DragEnter="TextBox_DragEnter" DragOver="TextBox_DragOver" Drop="TextBox_Drop"/>
+            <TextBox x:Name="thirdMessage"  Height="23" TextWrapping="Wrap"  Width="120" TextChanged="TextBox3_TextChanged" IsReadOnly="True" Grid.Column="1" Grid.Row="3" AllowDrop="True" DragEnter="TextBox_DragEnter" DragOver="TextBox_DragOver" Drop="TextBox_Drop"/>
+            <TextBox x:Name="forthMessage"  Height="23" TextWrapping="Wrap"  Width="120" TextChanged="TextBox4_TextChanged" IsReadOnly="True" Grid.Column="1" Grid.Row="4" AllowDrop="True" DragEnter="TextBox_DragEnter" DragOver="TextBox_DragOver" Drop="TextBox_Drop"/>
+            <TextBox x:Name="_5Message"  Height="23" TextWrapping="Wrap"  Width="120" TextChanged="TextBox5_TextChanged" IsReadOnly="True" Grid.Column="1" Grid.Row="5" AllowDrop="True" DragEnter="TextBox_DragEnter" DragOver="TextBox_DragOver" Drop="TextBox_Drop"/>
+            <TextBox x:Name="_6Message"  Height="23" TextWrapping="Wrap"  Width="120" TextChanged="TextBox6_TextChanged" IsReadOnly="True" Grid.Column="1" Grid.Row="6" AllowDrop="True" DragEnter="TextBox_DragEnter" DragOver="TextBox_DragOver" Drop="TextBox_Drop"/>
+            <TextBox x:Name="_7Message"  Height="23" TextWrapping="Wrap"  Width="120" TextChanged="TextBox7_TextChanged" IsReadOnly="True" Grid.Column="1" Grid.Row="7" AllowDrop="True" DragEnter="TextBox_DragEnter" DragOver="TextBox_DragOver" Drop="TextBox_Drop"/>
+            <TextBox x:Name="_8Message"  Height="23" TextWrapping="Wrap"  Width="120" TextChanged="TextBox8_TextChanged" IsReadOnly="True" Grid.Column="1" Grid.Row="8" AllowDrop="True" DragEnter="TextBox_DragEnter" DragOver="TextBox_DragOver" Drop="TextBox_Drop"/>
 
             <Label Style="{StaticResource DescriptionLabelStyle}" Content="Numéro de message" Width="151" Grid.Column="0" Grid.Row="0"/>
             <Label Style="{StaticResource DescriptionLabelStyle}" Content="Messages" Width="103" Grid.Column="1" Grid.Row="0"/>
