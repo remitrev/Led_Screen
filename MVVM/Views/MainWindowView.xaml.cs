@@ -19,7 +19,7 @@ namespace Led_Screen
             InitializeComponent();
             viewModel = new MainWindowViewModel();
             DataContext = viewModel;
-            historique.ItemsSource = viewModel.allContents;
+            historique.ItemsSource = viewModel.mainModel.AllMessages.Select(message => message.Content + " ,tag: " + message.Tag);
             bluetoothDevicesListBox.ItemsSource = viewModel.BluetoothLEDevices.Select(device => device.Name + " :" + device.BluetoothAddress);
         }
 
@@ -95,7 +95,6 @@ namespace Led_Screen
                 }
             }
             viewModel.FilterAndOrderHistorique(tagFilter.Text, "lastUse");
-            historique.ItemsSource = viewModel.allContents;
         }   
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
@@ -235,19 +234,16 @@ namespace Led_Screen
         private void Button_Click_LastUse(object sender, RoutedEventArgs e)
         {
             viewModel.FilterAndOrderHistorique(tagFilter.Text, "lastUse");
-            historique.ItemsSource = viewModel.allContents;
         }
 
         private void Button_Click_CreateDate(object sender, RoutedEventArgs e)
         {
             viewModel.FilterAndOrderHistorique(tagFilter.Text, "create");
-            historique.ItemsSource = viewModel.allContents;
         }
 
         private void TextBox_TextChanged_TagFilter(object sender, TextChangedEventArgs e)
         {
             viewModel.FilterAndOrderHistorique(tagFilter.Text, "lastUse");
-            historique.ItemsSource = viewModel.allContents;
         }
     }
 }

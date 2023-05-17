@@ -17,7 +17,7 @@ namespace Led_Screen.MVVM.ViewModels
     {
         public ObservableCollection<BluetoothLEDevice> BluetoothLEDevices { get; set; }
         public BluetoothLEDevice bluetoothDeviceSelected { get; set; }
-        public List<string> allContents { get; set; }
+        public MainModel mainModel;
 
         #region private data
         private BluetoothLEAdvertisementWatcher watcher;
@@ -25,14 +25,12 @@ namespace Led_Screen.MVVM.ViewModels
         private String UUID_CHARACTERISTICS_WRITE = "fee1";
         private String UUID_SERVICE = "fee0";
         private Guid serviceUUID = Guid.Parse("0000fee0-0000-1000-8000-00805f9b34fb");
-        private Guid characteristicsUUID = Guid.Parse("0000fee1-0000-1000-8000-00805f9b34fb");
-        private MainModel mainModel;
+        private Guid characteristicsUUID = Guid.Parse("0000fee1-0000-1000-8000-00805f9b34fb");        
         #endregion private
 
         public MainWindowViewModel()
         {
             mainModel = new MainModel();
-            getListContent();
             BluetoothLEDevices = new ObservableCollection<BluetoothLEDevice>();
             bluetoothDeviceSelected = null;
             InitWatcher();
@@ -41,20 +39,8 @@ namespace Led_Screen.MVVM.ViewModels
 
         public void FilterAndOrderHistorique(string filter, string order)
         {
-            //TODO: enlever allContents et rendre Messages in model Obervable puis mettre dans la liste dans la liste box avec le tag!
             mainModel.ApplyFilterOrOrderOnList(filter, order);
-            getListContent();
         }
-
-        private void getListContent()
-        {
-            allContents = new List<string>();
-            List<Message> messages = mainModel.AllMessages;
-            foreach (var message in messages)
-            {
-                allContents.Add(message.Content);
-            }
-        } 
 
         #region Search Bluetooth Device
         public async Task Start_SearchAsync()

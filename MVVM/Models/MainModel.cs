@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -11,11 +12,11 @@ namespace Led_Screen.MVVM.Models
     public class MainModel
     {
         private string connectionString = "Server=localhost;Database=led_screen;Uid=visualstudio;Pwd=visualstudio;";
-        public List<Message> AllMessages { get; protected set; }
+        public ObservableCollection<Message> AllMessages { get; protected set; }
 
         public MainModel()
         {
-            AllMessages = GetFilteredAndOrderMessages(null, "lastUse");
+            AllMessages = AllMessages = new ObservableCollection<Message>(GetFilteredAndOrderMessages(null, "lastUse"));
             Debug.Print("test");
         }
 
@@ -32,15 +33,14 @@ namespace Led_Screen.MVVM.Models
 
         public void ApplyFilterOrOrderOnList(string filter, string order)
         {
-            AllMessages.Clear();
-            AllMessages = GetFilteredAndOrderMessages(filter, order);
+            AllMessages = new ObservableCollection<Message>(GetFilteredAndOrderMessages(filter, order));
         }
 
         #region Private methods
         private void CreateOrUpdateMessage(string content, string tag)
         {
-            if(AllMessages.Exists(mess => mess.Tag.Equals(tag) && mess.Content.Equals(content))){
-                var message = AllMessages.Find(mess => mess.Tag.Equals(tag) && mess.Content.Equals(content));
+            if(AllMessages.ToList().Exists(mess => mess.Tag.Equals(tag) && mess.Content.Equals(content))){
+                var message = AllMessages.ToList().Find(mess => mess.Tag.Equals(tag) && mess.Content.Equals(content));
                 AllMessages.Remove(message);
                 message.UpdateLastUpdate(DateTime.Now);
                 UpdateMessageInDb(message);
