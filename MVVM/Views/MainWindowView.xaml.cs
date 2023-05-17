@@ -19,7 +19,7 @@ namespace Led_Screen
             InitializeComponent();
             viewModel = new MainWindowViewModel();
             DataContext = viewModel;
-            historique.ItemsSource = viewModel.mainModel.AllMessages.Select(message => message.Content + " ,tag: " + message.Tag);
+            historique.ItemsSource = viewModel.mainModel.AllMessages.Select(message => message.Content);
             bluetoothDevicesListBox.ItemsSource = viewModel.BluetoothLEDevices.Select(device => device.Name + " :" + device.BluetoothAddress);
         }
 
@@ -95,7 +95,8 @@ namespace Led_Screen
                 }
             }
             viewModel.FilterAndOrderHistorique(tagFilter.Text, "lastUse");
-        }   
+            historique.ItemsSource = viewModel.mainModel.AllMessages.Select(message => message.Content);
+        }
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
@@ -109,12 +110,13 @@ namespace Led_Screen
             {
                 secondMessage.IsReadOnly = true;
                 secondMessage.Text = "";
+                sendMessage.IsEnabled = false;
             }
             else
             {
                 secondMessage.IsReadOnly = false;
+                sendMessage.IsEnabled = true;
             }
-            CheckButtonSearchDiplay();
         }
 
         private void TextBox2_TextChanged(object sender, TextChangedEventArgs e)
@@ -202,7 +204,6 @@ namespace Led_Screen
 
         private void TextBoxTag_TextChanged(object sender, TextChangedEventArgs e)
         {
-            CheckButtonSearchDiplay();
         }
 
 
@@ -220,30 +221,25 @@ namespace Led_Screen
             return messages;
         }
 
-        private void CheckButtonSearchDiplay()
-        {
-            if(firstMessage.Text != "" && tag.Text != "")
-            {
-                sendMessage.IsEnabled = true;
-            } else
-            {
-                sendMessage.IsEnabled = false;
-            }
-        }
-
         private void Button_Click_LastUse(object sender, RoutedEventArgs e)
         {
             viewModel.FilterAndOrderHistorique(tagFilter.Text, "lastUse");
+            historique.ItemsSource = viewModel.mainModel.AllMessages.Select(message => message.Content);
+
         }
 
         private void Button_Click_CreateDate(object sender, RoutedEventArgs e)
         {
             viewModel.FilterAndOrderHistorique(tagFilter.Text, "create");
+            historique.ItemsSource = viewModel.mainModel.AllMessages.Select(message => message.Content);
+
         }
 
         private void TextBox_TextChanged_TagFilter(object sender, TextChangedEventArgs e)
         {
             viewModel.FilterAndOrderHistorique(tagFilter.Text, "lastUse");
+            historique.ItemsSource = viewModel.mainModel.AllMessages.Select(message => message.Content);
+
         }
     }
 }
